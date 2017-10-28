@@ -14,6 +14,7 @@
 <div>
     这是我的第一个JSP页面
     tag1
+    tag2
 </div>
 </body>
 </html>
