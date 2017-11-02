@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+ /* body {
+ 	background-color: #7b9fdf; 
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-repeat: no-repeat;
+	font-family: 微软雅黑, Verdana, Geneva, sans-serif;
+	font-size: 12px;
+	text-align: center;
+	color: #ffffff;
+} */
+
+  table {
+	font-size: 10pt;
+	color: #005faf;
+	top: 1px;
+	margin:0px;
+	height:67px;
+	padding:0px;
+	bottom: 0px;
+} 
+
+
+.sysbar_bj1 { height:66px;
+	background-image:url(../images/logo.jpg);
+background-repeat:no-repeat;
+}
+.sysbar_bj2 {  height:66px;
+background-image:url(../images/logo_bjs.jpg);
+background-repeat:repeat-x;
+}
+.sysbar_bj3 {height:66px;
+background-image:url(../images/logo_right.jpg);
+background-repeat:no-repeat;
+}
+.sysbar_bj4 {
+ 	height:20px;
+	width:50px;
+	font-family: "微软雅黑", "楷体", "隶书", "宋体";
+	font-size: 13px;
+	text-align:center;
+	color: #ffffff;
+	line-hight:20px;
+ 	float:left;
+}
+
+
+/* .sysbar_font {
+
+}
+ */
+a {
+	text-decoration:none;
+	color: #ffffff;
+}

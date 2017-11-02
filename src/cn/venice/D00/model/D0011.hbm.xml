@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.D00.model.D0011" table="d00_11" schema="dx">
+        <id name="bmdm">
+            <column name="bmdm" sql-type="varchar(10)" length="10"/>
+            <generator class="assigned"></generator>
+        </id>
+        <property name="content">
+            <column name="content" sql-type="varchar(5000)" length="5000"/>
+        </property>
+    </class>
+</hibernate-mapping>

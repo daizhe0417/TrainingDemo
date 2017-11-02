@@ -1,0 +1,12 @@
+/*单元格中，内容自动换行，全部显示*/
+.ui-jqgrid tr.jqgrow td {
+	white-space: normal !important;
+	height: auto;
+	vertical-align: text-top;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+/*单元格中，多出文字显示省略号*/
+/*.ui-jqgrid tr.jqgrow td {*/
+	/*text-overflow : ellipsis;*/
+/*}*/

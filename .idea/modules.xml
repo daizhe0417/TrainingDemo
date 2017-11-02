@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TrainingDemo.iml" filepath="$PROJECT_DIR$/TrainingDemo.iml" />
+      <module fileurl="file://$USER_HOME$/Java/Project/veniceutil/veniceutil.iml" filepath="$USER_HOME$/Java/Project/veniceutil/veniceutil.iml" />
     </modules>
   </component>
 </project>

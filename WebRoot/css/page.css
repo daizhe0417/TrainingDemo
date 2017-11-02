@@ -1,0 +1,262 @@
+@charset "utf-8";
+
+/*页面头*/
+td.pageheader {
+	height: 30;
+	background: url('../images/tab.jpg');
+}
+
+/*标题头*/
+td.gridheader {
+	height: 30;
+	background: url('../images/gridheader.jpg');
+}
+
+td.print {
+	
+}
+
+/*使查询文本框与td宽度自适应*/
+.queryheader div {
+	margin: 0 0px
+}
+
+.queryheader input,textarea,select {
+	width: 100%;
+	margin-left: 1px;
+	font-family: Verdana, Geneva, sans-serif;
+	text-align: center;
+}
+
+/*文字自动换行，强制英文单词断行*/
+.queryheader textarea {
+	word-wrap: break-word;
+	word-break: break-all;
+	/*
+	word-break: normal;
+	*/
+}
+
+.breakword {
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+/*显示数据部分*/
+.databody {
+	font-size: 9pt;
+}
+
+.databody tr {
+	background-color: #ffffff;
+	text-align: center;
+}
+
+.databody td {
+	height: 24;
+	backcolor: #ffffff;
+}
+
+.databody div {
+	margin: 0 0px
+}
+
+/*
+.databody input {
+	width: 100%;
+	margin-left: 1px;
+	text-align: center;
+}
+
+.databody select {
+	width: 100%;
+	margin-left: 1px
+}
+
+.mouseover {
+	background-color: #fcfafc;
+}
+
+.mouseout {
+	background-color: #ffffff;
+}
+*/ /*按钮*/
+.add_btn {
+	background-image: url('../images/add_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.save_btn {
+	background-image: url('../images/save_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.delete_btn {
+	background-image: url('../images/delete_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.select_btn {
+	background-image: url('../images/save_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.sys_btn {
+	background-image: url('../images/sys_btn.png');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+	font-size: 12px;
+	text-align: center;
+}
+
+.query_btn {
+	background-image: url('../images/query_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.report_btn {
+	background-image: url('../images/report_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.print_btn {
+	background-image: url('../images/print_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.export_btn {
+	background-image: url('../images/export_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.submit_btn {
+	background-image: url('../images/submit_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.clear_btn {
+	background-image: url('../images/clr_btn.png');
+	background-repeat: no-repeat;
+	width: 26px;
+	height: 26px;
+	border: 1px;
+	color: #000000;
+}
+
+.upward_btn {
+	background-image: url('../images/upward_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.upload_btn {
+	background-image: url('../images/upload_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.sch_all_btn {
+	background-image: url('../images/sch_all_btn.png');
+	background-repeat: no-repeat;
+	width: 26px;
+	height: 26px;
+	border: 1px;
+	color: #000000;
+}
+.receiveConfirm_btn{
+	background-image: url('../images/save_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+}
+
+.page_first {
+	background-image: url('../images/first_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+	font-size: 12px;
+	text-align: center;
+}
+
+.page_pre {
+	background-image: url('../images/pre_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+	font-size: 12px;
+	text-align: center;
+}
+
+.page_next {
+	background-image: url('../images/next_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+	font-size: 12px;
+	text-align: center;
+}
+
+.page_last {
+	background-image: url('../images/last_btn.jpg');
+	background-repeat: no-repeat;
+	width: 55px;
+	height: 22px;
+	border: 1px;
+	color: #000000;
+	font-size: 12px;
+	text-align: center;
+}
