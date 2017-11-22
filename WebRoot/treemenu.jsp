@@ -45,7 +45,7 @@
 	});
 </script>
 </head>
-<body style="background-color:#e2e7ed">
+<body style="background-color:#e2e7ed" onload="aaa">
 	<!--  <div id="tabs">  -->
 
 	<div
