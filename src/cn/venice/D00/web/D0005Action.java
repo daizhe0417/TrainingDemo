@@ -38,7 +38,7 @@ public class D0005Action extends GenericAction {
 	}
 
 	public String getRightsBySession() {
-		List tmp = mgr.getRightsBySession(this.getSession());
+		//List tmp = mgr.getRightsBySession(this.getSession());
 		return this.returnDatas(mgr.getRightsBySession(this.getSession()));
 
 	}
