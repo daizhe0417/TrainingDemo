@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.funds.D01.model.VProductnet" table="v_productnet" schema="funds">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/><generator class="native"></generator>
+        </id>
+        <property name="productId">
+            <column name="productId" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="riqi">
+            <column name="riqi" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="unitNet">
+            <column name="unitNet" sql-type="decimal(10,5)" precision="10" scale="5" not-null="true"/>
+        </property>
+        <property name="accumulatedNet">
+            <column name="accumulatedNet" sql-type="decimal(10,5)" precision="10" scale="5" not-null="true"/>
+        </property>
+        <property name="hs300">
+            <column name="hs300" sql-type="decimal(10,5)" precision="10" scale="5" not-null="true"/>
+        </property>
+        <property name="productName">
+            <column name="ProductName" sql-type="char(50)" length="50"/>
+        </property>
+        <property name="managementId">
+            <column name="ManagementID" sql-type="int(8)"/>
+        </property>
+        <property name="companyId">
+            <column name="CompanyID" sql-type="int(8)"/>
+        </property>
+        <property name="managementName">
+            <column name="ManagementName" sql-type="char(50)" length="50" not-null="true"/>
+        </property>
+        <property name="companyName">
+            <column name="CompanyName" sql-type="char(50)" length="50" not-null="true"/>
+        </property>
+        <property name="productCode">
+            <column name="productCode" sql-type="varchar(255)" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

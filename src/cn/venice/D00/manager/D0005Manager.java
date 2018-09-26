@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface D0005Manager extends GenericManager {
 
-	public List<D0004> getRightsBySession(HttpSession session);
+    List<D0004> getRightsBySession(HttpSession session);
 
-	public List<String> getMenuIdsByRoleno(String roleno);
+    List<String> getMenuIdsByRoleno(String roleno);
 
 }

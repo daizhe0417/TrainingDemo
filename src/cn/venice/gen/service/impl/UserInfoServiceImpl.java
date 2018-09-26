@@ -62,7 +62,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	}
 
 	/**
-	 * 取得登陆用户的部门代码
+	 * 取得登录用户的部门代码
 	 * 
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	}
 
 	/**
-	 * 取得登陆用户的角色代码
+	 * 取得登录用户的角色代码
 	 * 
 	 * @return
 	 */
@@ -90,7 +90,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	}
 
 	/**
-	 * 取得登陆用户的权限字符串
+	 * 取得登录用户的权限字符串
 	 * 
 	 * @return
 	 */

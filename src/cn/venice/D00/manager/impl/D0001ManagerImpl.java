@@ -3,6 +3,7 @@ package cn.venice.D00.manager.impl;
 import cn.venice.D00.manager.D0001Manager;
 import cn.venice.D00.model.D0001;
 import cn.venice.gen.service.UserInfoService;
+import cn.venice.util.common.ConstantClass;
 import cn.venice.util.excep.AuthFaildException;
 import cn.venice.util.manager.impl.GenericManagerImpl;
 import cn.venice.util.model.SelectOptionModel;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
 
 /**
  * 部门管理
@@ -75,7 +77,7 @@ public class D0001ManagerImpl extends GenericManagerImpl implements
     /**
      * 从数据库中根据部门代码取得所有下级部门列表
      *
-     * @param String bmdm
+     * @param bmdm
      * @return List<D0001> 所有bmdm like 的，包括下级部门
      */
     @Override
@@ -95,14 +97,14 @@ public class D0001ManagerImpl extends GenericManagerImpl implements
      * 调用通用Manager的saveOrUpdate方法，根据bmdm判断，如果数据库中已有，则用其id执行update，没有则save
      */
     @Override
-    public <T> boolean saveOrUpdate(T entity) {
+    public <T> int saveOrUpdate(T entity) {
         D0001 d = (D0001) entity;
         if (d.getDeltag() == null || d.getDeltag().equals("")) {
             d.setDeltag("0");
         }
 
         try {
-            if (dao.saveOrUpdate(d)) {
+            if (dao.saveOrUpdate(d)==ConstantClass.DZSUCCESS) {
                 // 对于状态为撤销的授权点，将其所属的授权点和研究方向的状态也设为撤销
                 if (d.getDeltag().equals("1")) {
                     dao.executeSQL("update D00_01 set deltag='1',cjrq=?,cxrq=? where bmdm like ?",
@@ -112,10 +114,10 @@ public class D0001ManagerImpl extends GenericManagerImpl implements
                             d.getCjrq(), d.getCxrq(), d.getBmdm() + "%");
                 }
             }
-            return true;
+            return ConstantClass.DZSUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return ConstantClass.DZFAILURE;
         }
     }
 
@@ -123,9 +125,9 @@ public class D0001ManagerImpl extends GenericManagerImpl implements
      * 删除方法，删除标记为1
      */
     @Override
-    public <T> boolean delete(T entity) {
+    public <T> int delete(T entity) {
         if (entity == null) {
-            return false;
+            return ConstantClass.DZFAILURE;
         }
         D0001 d = (D0001) entity;
         d.setDeltag("1");
@@ -140,7 +142,7 @@ public class D0001ManagerImpl extends GenericManagerImpl implements
     @Override
     public List<SelectOptionModel> getAllSOMDepts() {
         return dao
-                .find("select new cn.venice.util.model.SelectOptionModel(bmdm,bmmc) from D0001 order by bmdm");
+                .find("select new cn.venice.util.model.SelectOptionModel(bmdm,bmmc) from D0001 where deltag!='1' order by bmdm");
     }
 
 }

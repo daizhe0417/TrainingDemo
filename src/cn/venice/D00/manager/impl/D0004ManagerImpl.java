@@ -15,23 +15,23 @@ import java.util.List;
 
 @Service("d0004mgr")
 public class D0004ManagerImpl extends GenericManagerImpl implements
-		D0004Manager {
+        D0004Manager {
 
-	@Override
-	@Cacheable(value = "pmsafeCache", key = "'getAllMenus'")
-	public List<D0004> getAllMenus() {
-		return dao.find("from D0004 order by menuid");
-	}
+    @Override
+    @Cacheable(value = "pmsafeCache", key = "'getAllMenus'")
+    public List<D0004> getAllMenus() {
+        return dao.find("from D0004 order by menuid");
+    }
 
-	@Override
-	@CacheEvict(value = "pmsafeCache", key = "'getAllMenus'")
-	public <T> boolean delete(T entity) {
-		return super.delete(entity);
-	}
+    @Override
+    @CacheEvict(value = "pmsafeCache", key = "'getAllMenus'")
+    public <T> int delete(T entity) {
+        return super.delete(entity);
+    }
 
-	@Override
-	@CacheEvict(value = "pmsafeCache", key = "'getAllMenus'")
-	public <T> boolean saveOrUpdate(T entity) {
-		return super.saveOrUpdate(entity);
-	}
+    @Override
+    @CacheEvict(value = "pmsafeCache", key = "'getAllMenus'")
+    public <T> int saveOrUpdate(T entity) {
+        return super.saveOrUpdate(entity);
+    }
 }

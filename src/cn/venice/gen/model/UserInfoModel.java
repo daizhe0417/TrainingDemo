@@ -18,7 +18,15 @@ public class UserInfoModel implements java.io.Serializable {
 	private String bmdm;
 	private String bmmc;
 	private String deltag;
+	private String uType;
 
+	public String getuType() {
+		return uType;
+	}
+
+	public void setuType(String uType) {
+		this.uType = uType;
+	}
 	// Constructors
 
 	/** default constructor */

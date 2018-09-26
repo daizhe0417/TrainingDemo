@@ -2,26 +2,25 @@ package cn.venice.D00.web;
 
 import cn.venice.D00.manager.D0002Manager;
 import cn.venice.D00.model.D0002;
+import cn.venice.util.common.ConstantClass;
 import cn.venice.util.web.GenericAction;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 
+/**
+ * 角色管理
+ */
 @Controller("D00_02action")
 public class D0002Action extends GenericAction {
 	private static final long serialVersionUID = 1L;
 	@Resource(name = "d0002mgr")
 	private D0002Manager mgr;
 
-	/**
-	 * 保存用户信息
-	 * 
-	 * @return
-	 */
 	public String save() {
 		try {
 			D0002 d = (D0002) this.fromRequest(D0002.class);
-			if (mgr.saveOrUpdate(d)) {
+			if (mgr.saveOrUpdate(d)== ConstantClass.DZSUCCESS) {
 				return this.returnJSONSUCCESS();
 			}
 		} catch (Exception e) {
@@ -34,7 +33,7 @@ public class D0002Action extends GenericAction {
 	public String remove() {
 		try {
 			D0002 d = (D0002) this.fromRequest(D0002.class);
-			if (mgr.deleteById(D0002.class, d.getRoleno())) {
+			if (mgr.deleteById(D0002.class, d.getRoleno())== ConstantClass.DZSUCCESS) {
 				return this.returnJSONSUCCESS();
 			}
 		} catch (Exception e) {

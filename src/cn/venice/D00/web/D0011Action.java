@@ -2,6 +2,7 @@ package cn.venice.D00.web;
 
 import cn.venice.D00.manager.D0011Manager;
 import cn.venice.D00.model.D0011;
+import cn.venice.util.common.ConstantClass;
 import cn.venice.util.web.GenericAction;
 import org.springframework.stereotype.Controller;
 
@@ -15,7 +16,7 @@ public class D0011Action extends GenericAction {
 
     public String save() {
         D0011 d = (D0011) this.fromRequest(D0011.class);
-        if (mgr.saveOrUpdate(d)) {
+        if (mgr.saveOrUpdate(d)== ConstantClass.DZSUCCESS) {
             return this.returnJSONSUCCESS();
         } else {
             return this.returnJSONFAILURE();
@@ -24,7 +25,7 @@ public class D0011Action extends GenericAction {
 
     public String remove() {
         D0011 d = (D0011) this.fromRequest(D0011.class);
-        if (mgr.delete(d)) {
+        if (mgr.delete(d)== ConstantClass.DZSUCCESS) {
             return this.returnJSONSUCCESS();
         } else {
             return this.returnJSONFAILURE();

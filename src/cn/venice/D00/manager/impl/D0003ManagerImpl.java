@@ -9,12 +9,17 @@ import cn.venice.D00.model.D0003;
 import cn.venice.gen.constant.GenericConstant;
 import cn.venice.gen.model.PasswdModel;
 import cn.venice.gen.service.UserInfoService;
+import cn.venice.util.common.ConstantClass;
 import cn.venice.util.manager.impl.GenericManagerImpl;
 import cn.venice.util.md5.MD5Util;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
 
 @Service("d0003mgr")
 public class D0003ManagerImpl extends GenericManagerImpl implements
@@ -47,9 +52,9 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
     }
 
     @Override
-    public <T> boolean saveOrUpdate(T entity) {
+    public <T> int saveOrUpdate(T entity) {
         if (entity == null) {
-            return false;
+            return ConstantClass.DZFAILURE;
         }
 
         try {
@@ -64,18 +69,25 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
                                 + d.getUserno())));
             } else {
                 D0003 tmp = dao.findById(D0003.class, d.getUserno());
+                if (d.getBusinessCard() == null || "".equals(d.getBusinessCard())) {
+                    d.setBusinessCard(tmp.getBusinessCard());
+                }
                 d.setDeltag(tmp.getDeltag());
                 d.setPasswd(tmp.getPasswd());
             }
             return dao.merge(d);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return ConstantClass.DZFAILURE;
         }
     }
 
+    /**
+     * 锁定用户
+     * @return
+     */
     @Override
-    public <T> boolean delete(T entity) {
+    public <T> int delete(T entity) {
         D0003 d = (D0003) entity;
         D0003 tmp = dao.findById(D0003.class, d.getUserno());
         tmp.setDeltag("1");
@@ -86,21 +98,21 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
      * 重置用户名userno的密码
      */
     @Override
-    public boolean resetPasswd(String userno) {
+    public int resetPasswd(String userno) {
         D0003 d = dao.findById(D0003.class, userno);
         d.setPasswd(MD5Util.convertMD5(MD5Util
                 .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserno())));
-        return super.saveOrUpdate(d);
+        return dao.saveOrUpdate(d);
     }
 
     /**
      * 重置用户d的密码
      */
     @Override
-    public boolean resetPasswd(D0003 d) {
+    public int resetPasswd(D0003 d) {
         d.setPasswd(MD5Util.convertMD5(MD5Util
                 .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserno())));
-        return super.saveOrUpdate(d);
+        return dao.saveOrUpdate(d);
     }
 
     /**
@@ -118,7 +130,7 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
             D0003 d = (D0003) tmp.get(0);
             d.setPasswd(MD5Util.convertMD5(MD5Util.string2MD5(passwd
                     .getNewpasswd() + userno)));
-            if (super.saveOrUpdate(d)) {
+            if (super.saveOrUpdate(d) == ConstantClass.DZSUCCESS) {
                 return MODIFY_PASSWD_SUCCESS;
             } else {
                 return MODIFY_PASSWD_FAILURE;
@@ -128,13 +140,32 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
     }
 
     /**
-     * 注册用户
+     * 激活用户
+     * @return
      */
     @Override
-    public boolean regist(D0003 d) {
+    public int unLock(D0003 d) {
         D0003 tmp = dao.findById(D0003.class, d.getUserno());
-        d.setPasswd(tmp.getPasswd());
-        d.setDeltag("0");
-        return dao.saveOrUpdate(d);
+        tmp.setDeltag("0");
+        return dao.saveOrUpdate(tmp);
+    }
+
+    @Override
+    public String uploadFile(String id, String fileType, File file, String basePath, String suffix) {
+        String path = GenericConstant.BASE_PATH + ConstantClass.FILE_SEPARATOR;
+        switch (fileType) {
+            case GenericConstant.USER_MP:
+                path += GenericConstant.USER_MP;
+                break;
+            default:
+                path += GenericConstant.UPLOAD_DEFAULT;
+                break;
+        }
+        try {
+            return super.uploadFile(id, fileType, file, basePath, path, suffix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "上传失败";
+        }
     }
 }

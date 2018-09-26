@@ -18,7 +18,6 @@ public class D0002ManagerImpl extends GenericManagerImpl implements
 	/**
 	 * 得到所有角色信息
 	 * 
-	 * @param roleno
 	 * @return List<D0002>
 	 */
 	@Override

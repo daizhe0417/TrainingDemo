@@ -13,8 +13,23 @@
             <result type="json">
                 <param name="root">resJsonObj</param>
             </result>
+            <result name="exportResult" type="stream">
+                <param name="contentType">
+                    application/vnd.ms-excel
+                </param>
+                <param name="inputName">excelStream</param>
+                <param name="contentDisposition">
+                    attachment;filename="${downloadFileName}"
+                </param>
+                <param name="bufferSize">1024</param>
+            </result>
         </action>
         <action name="login" class="loginaction">
+            <result type="json">
+                <param name="root">resJsonStr</param>
+            </result>
+        </action>
+        <action name="regist" class="registaction">
             <result type="json">
                 <param name="root">resJsonStr</param>
             </result>
@@ -27,6 +42,14 @@
         <action name="pagesAction_*" class="pagesAction" method="{1}">
             <result name="success">
                 /htmlcontent.jsp
+            </result>
+        </action>
+    </package>
+
+    <package name="cn.venice.app" extends="json-default">
+        <action name="appaction_*" class="appaction" method="{1}">
+            <result type="json">
+                <param name="root">resJsonObj</param>
             </result>
         </action>
     </package>

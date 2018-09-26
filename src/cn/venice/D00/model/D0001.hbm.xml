@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.venice.D00.model.D0001" table="d00_01" schema="trainingDemo">
+    <class name="cn.venice.D00.model.D0001" table="d00_01">
         <id name="bmdm">
             <column name="bmdm" sql-type="varchar(10)" length="10"/>
             <generator class="assigned"></generator>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 
+import cn.venice.util.common.ConstantClass;
+
 @Controller("D00_01action")
 public class D0001Action extends GenericAction {
     private static final long serialVersionUID = 1L;
@@ -15,7 +17,7 @@ public class D0001Action extends GenericAction {
 
     public String save() {
         D0001 d = (D0001) this.fromRequest(D0001.class);
-        if (mgr.saveOrUpdate(d)) {
+        if (mgr.saveOrUpdate(d)==ConstantClass.DZSUCCESS) {
             return this.returnJSONSUCCESS();
         } else {
             return this.returnJSONFAILURE();
@@ -24,7 +26,7 @@ public class D0001Action extends GenericAction {
 
     public String remove() {
         D0001 d = (D0001) this.fromRequest(D0001.class);
-        if (mgr.delete(d)) {
+        if (mgr.delete(d)==ConstantClass.DZSUCCESS) {
             return this.returnJSONSUCCESS();
         } else {
             return this.returnJSONFAILURE();

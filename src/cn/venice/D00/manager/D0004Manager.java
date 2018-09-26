@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface D0004Manager extends GenericManager {
 
-	public abstract List<D0004> getAllMenus();
+    List<D0004> getAllMenus();
 
 }

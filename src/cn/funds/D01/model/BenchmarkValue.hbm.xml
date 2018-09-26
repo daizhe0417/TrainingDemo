@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.funds.D01.model.BenchmarkValue" table="benchmarkValue" schema="funds">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+            <generator class="native"></generator>
+        </id>
+        <property name="benchmarkId">
+            <column name="benchmarkId" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="riqi">
+            <column name="riqi" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="value">
+            <column name="value" sql-type="decimal(10,5)" precision="10" scale="5" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import cn.venice.gen.constant.GenericConstant;
+import cn.venice.util.common.ConstantClass;
 
 /**
  * @author daizhe
@@ -28,32 +29,32 @@ public class FileUtil {
 		//
 		// }
 		String path = new File(basePath).getParent()
-				+ GenericConstant.FILE_SEPARATOR + type;
+				+ ConstantClass.FILE_SEPARATOR + type;
 		if (!new File(path).exists()) {
 			new File(path).mkdirs();
 		}
 		int l = srcFileName.lastIndexOf("/");
 		String fileName = srcFileName.substring(l + 1);
-		File toFile = new File(path + GenericConstant.FILE_SEPARATOR + fileName);
+		File toFile = new File(path + ConstantClass.FILE_SEPARATOR + fileName);
 		l = srcFileName.lastIndexOf("../");
 		String uploadFileName = l >= 0 ? srcFileName.substring(l + 3)
 				: srcFileName;
-		File fromFile = new File(basePath + GenericConstant.FILE_SEPARATOR
+		File fromFile = new File(basePath + ConstantClass.FILE_SEPARATOR
 				+ uploadFileName);
 		fromFile.renameTo(toFile);
-		return "/" + type + GenericConstant.FILE_SEPARATOR + fileName;
+		return "/" + type + ConstantClass.FILE_SEPARATOR + fileName;
 	}
 
 	public static String saveFile(File file, String basePath, String fileName,
 			String type) throws FileNotFoundException,IOException {
 		String path = new File(basePath).getParent()
-				+ GenericConstant.FILE_SEPARATOR + type;
+				+ ConstantClass.FILE_SEPARATOR + type;
 		try {
 			if (!new File(path).exists()) {
 				new File(path).mkdirs();
 			}
 			InputStream is = new FileInputStream(file);
-			File toFile = new File(path + GenericConstant.FILE_SEPARATOR
+			File toFile = new File(path + ConstantClass.FILE_SEPARATOR
 					+ fileName);
 			OutputStream os = new FileOutputStream(toFile);
 			byte[] buffer = new byte[1024];
@@ -63,7 +64,7 @@ public class FileUtil {
 			}
 			is.close();
 			os.close();
-			return "/" + type + GenericConstant.FILE_SEPARATOR + fileName;
+			return "/" + type + ConstantClass.FILE_SEPARATOR + fileName;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw e;
