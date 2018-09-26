@@ -16,7 +16,7 @@ $.extend($.jgrid,{
 		recordtext: "{0} - {1}\u3000共 {2} 条",	// 共字前是全角空格
 		emptyrecords: "无数据显示",
 		loadtext: "读取中...",
-		pgtext : " {0} 共 {1} 页"
+		pgtext : " 第 {0} 页  共 {1} 页"
 	},
 	search : {
 		caption: "搜索...",

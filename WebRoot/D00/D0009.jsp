@@ -36,7 +36,7 @@
 					<div class="queryFieldsContainer">
 						<table>
 							<tr>
-								<td><input type="button" value="登陆名:" class="edit_title" />
+								<td><input type="button" value="登录名:" class="edit_title" />
 								</td>
 								<td><input id="query_userno" type="input" size="11" /></td>
 								<td><input type="button" value="真实姓名:" class="edit_title" />
@@ -75,7 +75,7 @@
 					<form id="showForm" name="showForm" method="post" action="">
 						<table class="detailTable" width="100%">
 							<tr width="100%">
-								<td width="100px">登陆名：</td>
+								<td width="100px">登录名：</td>
 								<td width="200px"><input id="userno" name="userno"
 									type="text" size="20" readOnly/></td>
 							</tr>

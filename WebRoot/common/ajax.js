@@ -9,6 +9,7 @@ var ajaxconf = {
 	error : function() {
 	}
 };
+
 function ajax(settings) {
 	jQuery.extend(ajaxconf, settings);
 	ajaxconf.url += "?random=" + Math.random();

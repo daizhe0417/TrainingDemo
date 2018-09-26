@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.funds.D01.model.TManagement" table="t_management" schema="funds">
+        <id name="id">
+            <column name="id" sql-type="int(8)"/><generator class="native"></generator>
+        </id>
+        <property name="name">
+            <column name="Name" sql-type="char(50)" length="50"/>
+        </property>
+        <property name="companyId">
+            <column name="CompanyID" sql-type="int(8)"/>
+        </property>
+        <property name="sex">
+            <column name="Sex" sql-type="char(2)" length="2"/>
+        </property>
+        <property name="education">
+            <column name="Education" sql-type="varchar(10)" length="10"/>
+        </property>
+        <property name="workDate">
+            <column name="WorkDate" sql-type="varchar(255)"/>
+        </property>
+        <property name="managementScale">
+            <column name="ManagementScale" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="productCount">
+            <column name="ProductCount" sql-type="int(11)"/>
+        </property>
+        <property name="averageIncome">
+            <column name="AverageIncome" sql-type="decimal(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="averageRetracement">
+            <column name="AverageRetracement" sql-type="decimal(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="maxRetracement">
+            <column name="MaxRetracement" sql-type="decimal(10,2)" precision="10" scale="2"/>
+        </property>
+        <property name="resumeLink">
+            <column name="ResumeLink" sql-type="varchar(255)"/>
+        </property>
+        <property name="comment">
+            <column name="Comment" sql-type="varchar(255)"/>
+        </property>
+        <property name="deltag">
+            <column name="deltag" sql-type="char(1)" length="1"/>
+        </property>
+    </class>
+</hibernate-mapping>

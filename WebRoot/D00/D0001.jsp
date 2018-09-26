@@ -1,65 +1,70 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<%@ page language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <%@include file="../common.jsp" %>
-    <script type='text/javascript' src='js/D0001.js'>
-
-    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <%@include file="../commoncss.jsp" %>
 </head>
-
-<body width="100%">
-<div id="queryBar">
-    <div id="queryBarHeader"></div>
-    <div class="queryFieldsContainer">
-        <table>
-            <tr>
-                <td><input type="button" value="部门代码:" class="edit_title"/>
-                </td>
-                <td><input id="query_bmdm" type="input" size="15"/></td>
-                <td><input type="button" value="部门名称:" class="edit_title"/>
-                </td>
-                <td><input id="query_bmmc" type="input" size="15"/></td>
-            </tr>
-        </table>
+<body>
+<div class="box">
+    <div class="box-header with-border" id="dzToolBar">
+        <div class="row col-sm-8" id="queryFieldContainer">
+            <div class="col-sm-4">
+                <input id="query_bmmc" type="text" class="form-control input-sm" placeholder="部门名称">
+            </div>
+            <div class="col-sm-4">
+                <select id="query_deltag" class="form-control input-sm">
+                </select>
+            </div>
+        </div>
+        <div class="pull-right" id="toolBarBtnContainer">
+        </div>
     </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div id="jqGridContainer" class="row">
+                <table id="jqGridList"></table>
+                <div id="jqGridPager"></div>
+            </div>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
 </div>
-<div id="detailDlg">
+<div class="modal" id="detailDlg" style="display: none;">
     <form id="showForm" name="showForm" method="post" action="">
-        <table class="detailTable" width="100%">
-            <tr width="100%">
-                <td width="100px">部门编号：</td>
-                <td width="200px"><input id="bmdm" name="bmdm" type="text"
-                                         size="20" required maxlength="10" minlength="2" number="true"/></td>
-            </tr>
-            <tr>
-                <td>部门名称：</td>
-                <td><input id="bmmc" name="bmmc" type="text" size="20"
-                           required/></td>
-            </tr>
-            <tr>
-                <td>成立年份：</td>
-                <td><input id="cjrq" name="cjrq" type="text" size="20"
-                           readonly/></td>
-            </tr>
-            <tr>
-                <td>状态：</td>
-                <td>
-                    <select id="deltag" name="deltag" class="yangshi1"
-                            style="width:159px; _width:178px;height:24px;" required></select>
-                </td>
-            </tr>
-            <tr>
-                <td>撤销年份：</td>
-                <td><input id="cxrq" name="cxrq" type="text" size="20"
-                           readonly/></td>
-            </tr>
-        </table>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 id="detailDlgTitleContainer" class="modal-title">Default Modal</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="bmdm">部门代码</label>
+                        <input type="text" class="form-control" required number id="bmdm" name="bmdm" minlength="10" maxlength="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="bmmc">部门名称</label>
+                        <input type="text" class="form-control" id="bmmc" name="bmmc">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="detailDlgCloseBtn" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                    <button type="button" id="detailDlgSaveBtn" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
     </form>
+    <!-- /.modal-dialog -->
 </div>
-<div id="jqGridContainer">
-    <table id="jqGridList"></table>
-    <div id="jqGridPager"></div>
-</div>
+<%@include file="../commonjs.jsp" %>
+<script src="<%=request.getContextPath()%>/D00/js/D0001.js?random=<%=Math.random()%>"></script>
 </body>
 </html>
+

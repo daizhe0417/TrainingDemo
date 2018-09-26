@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.D00.model.D0001" table="d00_01">
+        <id name="bmdm">
+            <column name="bmdm" sql-type="varchar(10)" length="10"/>
+            <generator class="assigned"></generator>
+        </id>
+        <property name="bmmc">
+            <column name="bmmc" sql-type="varchar(255)"/>
+        </property>
+        <property name="type">
+            <column name="type" sql-type="varchar(2)" length="2"/>
+        </property>
+        <property name="deltag">
+            <column name="deltag" sql-type="char(1)" length="1"/>
+        </property>
+        <property name="cjrq">
+            <column name="cjrq" sql-type="varchar(10)" length="10"/>
+        </property>
+        <property name="cxrq">
+            <column name="cxrq" sql-type="varchar(10)" length="10"/>
+        </property>
+    </class>
+</hibernate-mapping>

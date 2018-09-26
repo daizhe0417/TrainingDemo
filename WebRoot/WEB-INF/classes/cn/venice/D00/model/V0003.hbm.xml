@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.D00.model.V0003" table="v00_03" schema="funds">
+        <id name="userno">
+            <column name="userno" sql-type="varchar(10)" length="10"/>
+            <generator class="native"></generator>
+        </id>
+        <property name="username">
+            <column name="username" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="passwd">
+            <column name="passwd" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="roleno">
+            <column name="roleno" sql-type="varchar(4)" length="4" not-null="true"/>
+        </property>
+        <property name="bmdm">
+            <column name="bmdm" sql-type="varchar(10)" length="10" not-null="true"/>
+        </property>
+        <property name="deltag">
+            <column name="deltag" sql-type="char(1)" length="1" not-null="true"/>
+        </property>
+        <property name="bmmc">
+            <column name="bmmc" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="rolename">
+            <column name="rolename" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="company">
+            <column name="company" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="mobile">
+            <column name="mobile" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="email">
+            <column name="email" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="title">
+            <column name="title" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="businessCard">
+            <column name="businessCard" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="uType">
+            <column name="uType" sql-type="char(50)" length="50" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

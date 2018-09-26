@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.funds.D01.model.TCompany" table="t_company" schema="funds">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+            <generator class="native"></generator>
+        </id>
+        <property name="companyName">
+            <column name="CompanyName" sql-type="char(50)" length="50"/>
+        </property>
+        <property name="trace">
+            <column name="Trace" sql-type="char(10)" length="10"/>
+        </property>
+        <property name="management">
+            <column name="Management" sql-type="char(50)" length="50"/>
+        </property>
+        <property name="productCount">
+            <column name="ProductCount" sql-type="int(11)"/>
+        </property>
+        <property name="qualitativeScore">
+            <column name="QualitativeScore" sql-type="decimal(11,2)" precision="11" scale="2"/>
+        </property>
+        <property name="quantifyScore">
+            <column name="QuantifyScore" sql-type="decimal(11,2)" precision="11" scale="2"/>
+        </property>
+        <property name="traceLink">
+            <column name="TraceLink" sql-type="varchar(255)"/>
+        </property>
+        <property name="documentLink">
+            <column name="DocumentLink" sql-type="varchar(255)"/>
+        </property>
+        <property name="comment">
+            <column name="Comment" sql-type="varchar(255)"/>
+        </property>
+        <property name="qualitativeLink">
+            <column name="QualitativeLink" sql-type="varchar(255)"/>
+        </property>
+        <property name="quantifyLink">
+            <column name="QuantifyLink" sql-type="varchar(255)"/>
+        </property>
+        <property name="deltag">
+            <column name="deltag" sql-type="char(1)" length="1"/>
+        </property>
+        <property name="tjr">
+            <column name="tjr" sql-type="varchar(255)"/>
+        </property>
+        <property name="foundDate">
+            <column name="FoundDate" sql-type="varchar(10)" length="10"/>
+        </property>
+    </class>
+</hibernate-mapping>
