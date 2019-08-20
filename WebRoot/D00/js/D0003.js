@@ -1,74 +1,37 @@
-var jqGridConf = {
-    caption: "用户列表",
-    colNames: ['用户类型', '登录名', '姓名', '工作单位', '职务', '联系电话', '邮箱', '名片', '状态'],
-    colModel: [{
-        name: 'uType',
-        index: 'uType',
+var dzGridConf = {
+    columns: [{
+        name: '用户类型',
+        fieldName: 'uType',
         width: 70,
-        formatter: function (cellvalue, options, rowObject) {
-            if (cellvalue == '0') {
-                return "后台";
-            } else if (cellvalue == '1') {
-                return "前台";
-            } else {
-                return "";
-            }
-        },
-        unformat: function (cellvalue, options, rowObject) {
-            if (cellvalue == '后台') {
-                return "0";
-            } else if (cellvalue == '前台') {
-                return "1";
-            } else {
-                return "";
-            }
-        }
+        hidden: true
     }, {
-        name: 'userno',
-        index: 'userno',
+        name: '登录名',
+        fieldName: 'userNo',
         width: 90,
         readonly: true
     }, {
-        name: 'username',
-        index: 'username',
+        name: '姓名',
+        fieldName: 'userName',
         width: 100
     }, {
-        name: 'company',
-        index: 'company',
-        width: 200
+        name: '身份类型',
+        fieldName: 'roleName',
+        width: 100
     }, {
-        name: 'title',
-        index: 'title',
+        name: 'roleId',
+        fieldName: 'roleId',
+        hidden: true
+    }, {
+        name: '部门|班级',
+        fieldName: 'bmmc',
         width: 90
     }, {
-        name: 'mobile',
-        index: 'mobile',
-        width: 100
+        name: 'bmId',
+        fieldName: 'bmId',
+        hidden: true
     }, {
-        name: 'email',
-        index: 'email',
-        width: 200
-    }, {
-        name: 'businessCard',
-        index: 'businessCard',
-        width: 100,
-        formatter: function (cellvalue, options, rowObject) {
-            if (cellvalue != undefined && cellvalue != '') {
-                return "<a href='../" + cellvalue.replace("\\","\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
-            } else {
-                return "";
-            }
-        },
-        unformat: function (cellvalue, options, rowObject) {
-            if (cellvalue != "") {
-                return $(cellvalue).attr("realpath");
-            } else {
-                return "";
-            }
-        }
-    }, {
-        name: 'deltag',
-        index: 'deltag',
+        name: '状态',
+        fieldName: 'deltag',
         width: 80,
         formatter: function (cellvalue, options, rowObject) {
             if (cellvalue == '0') {
@@ -96,6 +59,8 @@ var jqGridConf = {
 };
 
 var actionname = "D00_03action";
+var bmList = [];
+var bjList = [];
 jQuery(document).ready(function () {
     commonInit({
         detailDlgTitle: '用户',
@@ -133,8 +98,8 @@ jQuery(document).ready(function () {
             active: true,
             bind: onUnLockBtn
         }],
-        readOnlyFields: ['userno'],
-        idFieldName: 'userno',
+        readOnlyFields: ['userNo'],
+        idFieldName: 'userNo',
         checkExist: true,
         validateSetting: {
             rules: {
@@ -159,107 +124,209 @@ jQuery(document).ready(function () {
         }
     });
 
-    $("#iptBusinessCardUploadFile").dzFileUpload({
-        uploadExtraData: {
-            "fileType": "mp"
-        },
-        inputFiled: "businessCard",
-        allowedFileExtensions: ["jpg", "jpeg","png"]
+    $("#roleId").on("change", function () {
+        console.log('change' + JSON.stringify(bmList) + JSON.stringify(bjList));
+        if ($(this).val() === "1") {
+            $("#bm_lb").html("部门");
+            var sel = $("#bmId");
+            if (bmList.length > 0) {
+                sel.html("<option value=''>--请选择部门--</option>");
+                for (var i = 0; i < bmList.length; i++) {
+                    sel.append('<option value="' + bmList[i].value + '">' + bmList[i].name + '</option>')
+                }
+            } else {
+                sel.html("<option value=''>--暂无部门信息--</option>");
+            }
+        } else {
+            $("#bm_lb").html("班级");
+            var sel = $("#bmId");
+            if (bjList.length > 0) {
+                sel.html("<option value=''>--请选择班级--</option>");
+                for (var i = 0; i < bjList.length; i++) {
+                    sel.append('<option value="' + bjList[i].value + '">' + bjList[i].name + '</option>')
+                }
+            } else {
+                sel.html("<option value=''>--暂无班级信息--</option>");
+            }
+        }
     });
+
+    // $("#bmId").select2();
+
+    ajax({
+        url: "D00_01action_getAllSOMDepts",
+        data: {
+            reqJsonStr: JSON.stringify({})
+        },
+        success: getAllSOMDeptsCallback,
+        error: getAllSOMDeptsCallback
+    });
+
+    ajax({
+        url: "D00_21action_getSOMClasses",
+        data: {
+            reqJsonStr: JSON.stringify({})
+        },
+        success: getSOMClassesCallback,
+        error: getSOMClassesCallback
+    });
+
 });
 
+function after_filledInput(item) {
+    if (item.roleId === "1") {
+        $("#bm_lb").html("部门");
+        var sel = $("#bmId");
+        if (bmList.length > 0) {
+            sel.html("<option value=''>--请选择部门--</option>");
+            for (var i = 0; i < bmList.length; i++) {
+                sel.append('<option value="' + bmList[i].value + '">' + bmList[i].name + '</option>')
+            }
+        } else {
+            sel.html("<option value=''>--暂无部门信息--</option>");
+        }
+        setSelectValue(document
+            .getElementById("bmId"), item.bmId);
+    } else {
+        $("#bm_lb").html("班级");
+        var sel = $("#bmId");
+        if (bjList.length > 0) {
+            sel.html("<option value=''>--请选择班级--</option>");
+            for (var i = 0; i < bjList.length; i++) {
+                sel.append('<option value="' + bjList[i].value + '">' + bjList[i].name + '</option>')
+            }
+        } else {
+            sel.html("<option value=''>--暂无班级信息--</option>");
+        }
+        setSelectValue(document
+            .getElementById("bmId"), item.bmId);
+    }
+}
+
 function onLockBtn() {
-    var row = jQuery("#jqGridList").jqGrid('getGridParam', 'selrow');
-    if (row == null || row == 'undefined') {
-        alert('请先选择要锁定的用户！');
+    var row = $("#" + conf.dzGridContainer).dzGrid("getCurrentSelectedRowId");
+    console.log(JSON.stringify(row));
+    if (row == null || row == 'undefined' || row == "") {
+        DzConfirm.alert("请先选择要锁定的用户！");
+        // alert('请先选择要锁定的用户！');
         return false;
     }
     var warnMsg = "确认要锁定用户吗？";
-    if (confirm(warnMsg)) {
-        var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
-        if (conf.deleteType != 'ById') {
-            var rm = {
-                reqJsonStr: JSON.stringify(rowDatas)
-            };
-        } else {
-            var id = rowDatas[conf.idFieldName];
-            var rm = {
-                reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
-            };
+    DzConfirm.confirm(warnMsg).click(function (item) {
+        if (item) {
+            var rowDatas = $("#" + conf.dzGridContainer).dzGrid("getRowData", row);
+            if (conf.deleteType != 'ById') {
+                var rm = {
+                    reqJsonStr: JSON.stringify(rowDatas)
+                };
+            } else {
+                var id = rowDatas[conf.idFieldName];
+                var rm = {
+                    reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
+                };
+            }
+            ajax({
+                url: actionname + "_remove",
+                data: rm,
+                success: deleteCallBack,
+                error: deleteCallBack
+            });
         }
-        ajax({
-            url: actionname + "_remove",
-            data: rm,
-            success: deleteCallBack,
-            error: deleteCallBack
-        });
-    }
+    });
 }
 
 function deleteCallBack(item) {
     if (item.status == 1) {
-        alert("操作成功！");
+        // alert("操作成功！");
+        DzConfirm.alert("操作成功！");
+        // return false;
     } else {
-        alert("操作失败！");
+        // alert("操作失败！");
+        DzConfirm.alert("操作失败！");
     }
     toQuery();
 }
 
 function onResetBtn() {
-    var row = jQuery("#jqGridList").jqGrid('getGridParam', 'selrow');
+    var row = $("#" + conf.dzGridContainer).dzGrid("getCurrentSelectedRowId");
     if (row == null || row == 'undefined') {
-        alert('请先选择要重置密码的用户！');
+        // alert('请先选择要重置密码的用户！');
+        DzConfirm.alert("请先选择要重置密码的用户！");
         return false;
     }
-    var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
-    var warnMsg = "确认要重置用户[ " + rowDatas["username"] + " ]的密码吗？";
-    if (confirm(warnMsg)) {
-        ajax({
-            url: "D00_03action_resetPasswd",
-            data: {
-                reqJsonStr: JSON.stringify({
-                    userno: rowDatas["userno"]
-                })
-            },
-            success: resetPasswdCallBack,
-            error: resetPasswdCallBack
-        });
-    }
+    var rowDatas = $("#" + conf.dzGridContainer).dzGrid("getRowData", row);
+    var warnMsg = "确认要重置用户[ " + rowDatas["userName"] + " ]的密码吗？";
+    DzConfirm.confirm(warnMsg).click(function (item) {
+        if (item) {
+            ajax({
+                url: "D00_03action_resetPasswd",
+                data: {
+                    reqJsonStr: JSON.stringify({
+                        userNo: rowDatas["userNo"]
+                    })
+                },
+                success: resetPasswdCallBack,
+                error: resetPasswdCallBack
+            });
+        }
+    });
 }
 
 function resetPasswdCallBack(item) {
     if (item.status == '1') {
-        alert('重置密码成功');
+        // alert('重置密码成功');
+        DzConfirm.alert("重置密码成功！");
     } else {
-        alert('重置密码失败');
+        // alert('重置密码失败');
+        DzConfirm.alert("重置密码失败！");
     }
 }
 
 function onUnLockBtn() {
-    var row = jQuery("#jqGridList").jqGrid('getGridParam', 'selrow');
+    var row = $("#" + conf.dzGridContainer).dzGrid("getCurrentSelectedRowId");
     if (row == null || row == 'undefined') {
-        alert('请先选择要激活的用户！');
+        // alert('请先选择要激活的用户！');
+        DzConfirm.alert("请先选择要激活的用户！");
         return false;
     }
     var warnMsg = "确认要激活吗？";
-    if (confirm(warnMsg)) {
-        var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
-        if (conf.deleteType != 'ById') {
-            var rm = {
-                reqJsonStr: JSON.stringify(rowDatas)
-            };
-        } else {
-            var id = rowDatas[conf.idFieldName];
-            var rm = {
-                reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
-            };
+    DzConfirm.confirm(warnMsg).click(function (item) {
+        if (item) {
+            var rowDatas = $("#" + conf.dzGridContainer).dzGrid("getRowData", row);
+            if (conf.deleteType != 'ById') {
+                var rm = {
+                    reqJsonStr: JSON.stringify(rowDatas)
+                };
+            } else {
+                var id = rowDatas[conf.idFieldName];
+                var rm = {
+                    reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
+                };
+            }
+            ajax({
+                url: actionname + "_unLock",
+                data: rm,
+                success: deleteCallBack,
+                error: deleteCallBack
+            });
         }
-        ajax({
-            url: actionname + "_unLock",
-            data: rm,
-            success: deleteCallBack,
-            error: deleteCallBack
-        });
-    }
+    });
+}
 
+function getAllSOMDeptsCallback(item) {
+    console.log(JSON.stringify(item));
+    if (item.datas != null) {
+        bmList = item.datas;
+    } else {
+        bmList = [];
+    }
+}
+
+function getSOMClassesCallback(item) {
+    console.log(JSON.stringify(item));
+    if (item.datas != null) {
+        bjList = item.datas;
+    } else {
+        bjList = [];
+    }
 }

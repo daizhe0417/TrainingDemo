@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.gen.dzTask.model.DzVTaskStageUser" table="dz_v_task_stage_user" schema="trainingDemo">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/><generator class="native"></generator>
+        </id>
+        <property name="stageId">
+            <column name="stageId" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="userId">
+            <column name="userId" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="endTime">
+            <column name="endTime" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="taskId">
+            <column name="taskId" sql-type="int(255)" not-null="true"/>
+        </property>
+        <property name="stage">
+            <column name="stage" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="userName">
+            <column name="userName" sql-type="varchar(255)" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

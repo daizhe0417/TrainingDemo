@@ -16,5 +16,8 @@
         <property name="url" type="java.lang.String">
             <column name="url" />
         </property>
+        <property name="target" type="java.lang.String">
+            <column name="target" />
+        </property>
     </class>
 </hibernate-mapping>

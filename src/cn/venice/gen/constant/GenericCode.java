@@ -9,4 +9,6 @@ public class GenericCode {
     public static final int PASS_WRONG_ERR_CODE = -1020;
     public static final int SAVE_OK = 1;
     public static final int SAVE_FAILURE = -1;
+
+
 }

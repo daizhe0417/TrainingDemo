@@ -1,66 +1,56 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<%@ page language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<%@include file="../common.jsp"%>
-<script type='text/javascript' src='js/D0021.js'>
-	
-</script>
-
-<script type='text/javascript'
-	src='<%=request.getContextPath()%>/dwr/interface/d0021mgr.js'>
-	
-</script>
-<script type='text/javascript'
-	src='<%=request.getContextPath()%>/dwr/interface/D00_21action.js'>
-	
-</script>
-
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<%@include file="../commoncss.jsp" %>
 </head>
-
 <body>
-	<table border="0" width="1000px">
-		<tr width="100%">
-			<td colspan="3" width="100%">
-				<div id="queryBar">
-					<div id="queryBarHeader"></div>
-					<div class="queryFieldsContainer">
-						<table>
-							<tr>
-								<td><input type="button" value="类型代码:" class="edit_title" />
-								</td>
-								<td><input id="query_lxdm" type="input" size="15" /></td>
-								<td><input type="button" value="类型名称:" class="edit_title"
-									title="jiaose" /></td>
-								<td><input id="query_lxmc" type="input" size="15" /></td>
-							</tr>
-						</table>
+<div class="box">
+	<div class="box-header with-border" id="dzToolBar">
+		<div class="row col-sm-8" id="queryFieldContainer">
+			<div class="col-sm-3">
+				<input id="query_bmmc" type="text" class="form-control " placeholder="班级名称">
+			</div>
+		</div>
+		<div class="pull-right" id="toolBarBtnContainer">
+		</div>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<div id="dzGridContainer" class="dataTables_wrapper form-inline dt-bootstrap">
+		</div>
+		<!-- /.tab-pane -->
+	</div>
+	<!-- /.tab-content -->
+</div>
+<div class="modal" id="detailDlg" style="display: none;">
+	<form id="showForm" name="showForm" method="post" action="">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span></button>
+					<h4 id="detailDlgTitleContainer" class="modal-title">Default Modal</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="bmmc">班级名称</label>
+						<input class="form-control" required title="不能为空" id="bmmc" name="bmmc">
 					</div>
 				</div>
-				<div id="detailDlg">
-					<form id="showForm" name="showForm" method="post" action="">
-						<table class="detailTable" width="100%">
-							<tr width="100%">
-								<td width="100px"><label>类型代码:</label></td>
-								<td width="200px"><input id="lxdm" name="lxdm" type="text"
-									size="20" required maxlength="4" number="true" /></td>
-							</tr>
-							<tr>
-								<td>类型名称:</td>
-								<td><input id="lxmc" name="lxmc" type="text" size="20"
-									required /></td>
-							</tr>
-						</table>
-					</form>
+				<div class="modal-footer">
+					<button type="button" id="detailDlgCloseBtn" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+					<button type="button" id="detailDlgSaveBtn" class="btn btn-primary">保存</button>
 				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<table id="jqGridList"></table>
-				<div id="jqGridPager"></div>
-			</td>
-		</tr>
-	</table>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+	</form>
+	<!-- /.modal-dialog -->
+</div>
+<%@include file="../commonjs.jsp" %>
+<script src="<%=request.getContextPath()%>/D00/js/D0021.js?random=<%=Math.random()%>"></script>
 </body>
 </html>

@@ -33,21 +33,22 @@ public class AppAction extends GenericAction {
         D0003 d = (D0003) this.fromJSON(reqJsonStr, D0003.class);
         try {
             List tmp = mgr.find(
-                    "from V0003 where userno=? and passwd=?",
-                    d.getUserno(),
+                    "from V0003 where userNo=? and passwd=?",
+                    d.getUserNo(),
                     MD5Util.convertMD5(MD5Util.string2MD5(d
-                            .getPasswd() + d.getUserno())));
+                            .getPasswd() + d.getUserNo())));
             if (tmp == null || tmp.isEmpty()) {
                 return this.returnJSONFAILURE("用户名或密码错误");
             } else {
                 V0003 v03 = (V0003) tmp.get(0);
                 UserInfoModel v = new UserInfoModel();
-                v.setUserno(v03.getUserno());
-                v.setUsername(v03.getUsername());
-                v.setBmdm(v03.getBmdm());
+                v.setUserNo(v03.getUserNo());
+                v.setUserName(v03.getUserName());
+                v.setBmId(v03.getBmId());
                 v.setBmmc(v03.getBmmc());
-                v.setRoleno(v03.getRoleno());
-                v.setRolename(v03.getRolename());
+                v.setRoleNo(String.valueOf(v03.getRoleId()));
+                v.setRoleName(v03.getRoleName());
+                v.setUserType(v03.getUserType());
                 return this.returnDatas(v);
             }
         } catch (Exception e) {
@@ -60,22 +61,23 @@ public class AppAction extends GenericAction {
         D0003 d = (D0003) this.fromJSON(reqJsonStr, D0003.class);
         try {
             List tmp = mgr.find(
-                    "from V0003 where userno=? and passwd=?",
-                    d.getUserno(),
+                    "from V0003 where userNo=? and passwd=?",
+                    d.getUserNo(),
                     MD5Util.convertMD5(MD5Util.string2MD5(d
-                            .getPasswd() + d.getUserno())));
+                            .getPasswd() + d.getUserNo())));
             if (tmp == null || tmp.isEmpty()) {
                 return this.returnJSONFAILURE("用户名或密码错误");
             } else {
                 V0003 v03 = (V0003) tmp.get(0);
                 UserInfoModel v = new UserInfoModel();
-                v.setUserno(v03.getUserno());
-                v.setUsername(v03.getUsername());
-                v.setBmdm(v03.getBmdm());
+                v.setUserNo(v03.getUserNo());
+                v.setUserName(v03.getUserName());
+                v.setBmId(v03.getBmId());
                 v.setBmmc(v03.getBmmc());
-                v.setRoleno(v03.getRoleno());
-                v.setRolename(v03.getRolename());
-                String authFilterStatement = " and bmdm like '" + v03.getBmdm() + "%'";
+                v.setRoleNo(String.valueOf(v03.getRoleId()));
+                v.setRoleName(v03.getRoleName());
+                v.setUserType(v03.getUserType());
+                String authFilterStatement = " and bmdm like '" + v03.getBmId() + "%'";
                 return this.returnDatas(mgr.find("from VAccount where deltag!='1'" + authFilterStatement));
             }
         } catch (Exception e) {

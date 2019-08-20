@@ -1,22 +1,23 @@
 package cn.venice.D00.model;
 
-/**
- * Created by venice on 2017/1/5.
- */
+import java.util.Objects;
+
 public class D0001 {
-    private String bmdm;
+    private Integer id;
     private String bmmc;
+    private String descrip;
     private String type;
     private String deltag;
-    private String cjrq;
-    private String cxrq;
+    private Integer parentId;
+    private Integer seq;
+    private String bmdm;
 
-    public String getBmdm() {
-        return bmdm;
+    public Integer getId() {
+        return id;
     }
 
-    public void setBmdm(String bmdm) {
-        this.bmdm = bmdm;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getBmmc() {
@@ -25,6 +26,14 @@ public class D0001 {
 
     public void setBmmc(String bmmc) {
         this.bmmc = bmmc;
+    }
+
+    public String getDescrip() {
+        return descrip;
+    }
+
+    public void setDescrip(String descrip) {
+        this.descrip = descrip;
     }
 
     public String getType() {
@@ -43,47 +52,48 @@ public class D0001 {
         this.deltag = deltag;
     }
 
-    public String getCjrq() {
-        return cjrq;
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setCjrq(String cjrq) {
-        this.cjrq = cjrq;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
-    public String getCxrq() {
-        return cxrq;
+    public Integer getSeq() {
+        return seq;
     }
 
-    public void setCxrq(String cxrq) {
-        this.cxrq = cxrq;
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
+
+    public String getBmdm() {
+        return bmdm;
+    }
+
+    public void setBmdm(String bmdm) {
+        this.bmdm = bmdm;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         D0001 d0001 = (D0001) o;
-
-        if (bmdm != null ? !bmdm.equals(d0001.bmdm) : d0001.bmdm != null) return false;
-        if (bmmc != null ? !bmmc.equals(d0001.bmmc) : d0001.bmmc != null) return false;
-        if (type != null ? !type.equals(d0001.type) : d0001.type != null) return false;
-        if (deltag != null ? !deltag.equals(d0001.deltag) : d0001.deltag != null) return false;
-        if (cjrq != null ? !cjrq.equals(d0001.cjrq) : d0001.cjrq != null) return false;
-        if (cxrq != null ? !cxrq.equals(d0001.cxrq) : d0001.cxrq != null) return false;
-
-        return true;
+        return Objects.equals(id, d0001.id) &&
+                Objects.equals(bmmc, d0001.bmmc) &&
+                Objects.equals(descrip, d0001.descrip) &&
+                Objects.equals(type, d0001.type) &&
+                Objects.equals(deltag, d0001.deltag) &&
+                Objects.equals(parentId, d0001.parentId) &&
+                Objects.equals(seq, d0001.seq) &&
+                Objects.equals(bmdm, d0001.bmdm);
     }
 
     @Override
     public int hashCode() {
-        int result = bmdm != null ? bmdm.hashCode() : 0;
-        result = 31 * result + (bmmc != null ? bmmc.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (deltag != null ? deltag.hashCode() : 0);
-        result = 31 * result + (cjrq != null ? cjrq.hashCode() : 0);
-        result = 31 * result + (cxrq != null ? cxrq.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, bmmc, descrip, type, deltag, parentId, seq, bmdm);
     }
 }

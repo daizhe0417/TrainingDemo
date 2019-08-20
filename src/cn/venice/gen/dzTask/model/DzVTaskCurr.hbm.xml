@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.gen.dzTask.model.DzVTaskCurr" table="dz_v_task_curr" schema="trainingDemo">
+        <id name="taskId">
+            <column name="taskId" sql-type="int(255)"/>
+            <generator class="native"></generator>
+        </id>
+        <property name="taskType">
+            <column name="taskType" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="createTime">
+            <column name="createTime" sql-type="varchar(19)" length="19" not-null="true"/>
+        </property>
+        <property name="description">
+            <column name="description" sql-type="varchar(500)" length="500" not-null="true"/>
+        </property>
+        <property name="createUser">
+            <column name="createUser" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="currentStage">
+            <column name="currentStage" sql-type="int(255)" not-null="true"/>
+        </property>
+        <property name="deptId">
+            <column name="deptId" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="maxStage">
+            <column name="maxStage" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="startTime">
+            <column name="startTime" sql-type="varchar(19)" length="19" not-null="true"/>
+        </property>
+        <property name="endTime">
+            <column name="endTime" sql-type="varchar(19)" length="19" not-null="true"/>
+        </property>
+        <property name="userList">
+            <column name="userList" sql-type="varchar(500)" length="500" not-null="true"/>
+        </property>
+        <property name="stageName">
+            <column name="stageName" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="stageDisplayName">
+            <column name="stageDisplayName" sql-type="varchar(500)" length="500" not-null="true"/>
+        </property>
+        <property name="createUserName">
+            <column name="createUserName" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="finishedUsers">
+            <column name="finishedUsers" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="finishType">
+            <column name="finishType" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="stageId">
+            <column name="stageId" sql-type="int(11)" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

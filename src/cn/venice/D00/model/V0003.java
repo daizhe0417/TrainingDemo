@@ -3,35 +3,31 @@ package cn.venice.D00.model;
 import java.util.Objects;
 
 public class V0003 {
-    private String userno;
-    private String username;
+    private String userNo;
+    private String userName;
     private String passwd;
-    private String roleno;
-    private String bmdm;
+    private Integer roleId;
+    private Integer bmId;
     private String deltag;
-    private String bmmc;
-    private String rolename;
-    private String company;
-    private String mobile;
     private String email;
-    private String title;
-    private String businessCard;
-    private String uType;
+    private String userType;
+    private String bmmc;
+    private String roleName;
 
-    public String getUserno() {
-        return userno;
+    public String getUserNo() {
+        return userNo;
     }
 
-    public void setUserno(String userno) {
-        this.userno = userno;
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPasswd() {
@@ -42,20 +38,20 @@ public class V0003 {
         this.passwd = passwd;
     }
 
-    public String getRoleno() {
-        return roleno;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setRoleno(String roleno) {
-        this.roleno = roleno;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
-    public String getBmdm() {
-        return bmdm;
+    public Integer getBmId() {
+        return bmId;
     }
 
-    public void setBmdm(String bmdm) {
-        this.bmdm = bmdm;
+    public void setBmId(Integer bmId) {
+        this.bmId = bmId;
     }
 
     public String getDeltag() {
@@ -66,38 +62,6 @@ public class V0003 {
         this.deltag = deltag;
     }
 
-    public String getBmmc() {
-        return bmmc;
-    }
-
-    public void setBmmc(String bmmc) {
-        this.bmmc = bmmc;
-    }
-
-    public String getRolename() {
-        return rolename;
-    }
-
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -106,28 +70,28 @@ public class V0003 {
         this.email = email;
     }
 
-    public String getTitle() {
-        return title;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
-    public String getBusinessCard() {
-        return businessCard;
+    public String getBmmc() {
+        return bmmc;
     }
 
-    public void setBusinessCard(String businessCard) {
-        this.businessCard = businessCard;
+    public void setBmmc(String bmmc) {
+        this.bmmc = bmmc;
     }
 
-    public String getuType() {
-        return uType;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setuType(String uType) {
-        this.uType = uType;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     @Override
@@ -135,25 +99,21 @@ public class V0003 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         V0003 v0003 = (V0003) o;
-        return Objects.equals(userno, v0003.userno) &&
-                Objects.equals(username, v0003.username) &&
+        return Objects.equals(userNo, v0003.userNo) &&
+                Objects.equals(userName, v0003.userName) &&
                 Objects.equals(passwd, v0003.passwd) &&
-                Objects.equals(roleno, v0003.roleno) &&
-                Objects.equals(bmdm, v0003.bmdm) &&
+                Objects.equals(roleId, v0003.roleId) &&
+                Objects.equals(bmId, v0003.bmId) &&
                 Objects.equals(deltag, v0003.deltag) &&
-                Objects.equals(bmmc, v0003.bmmc) &&
-                Objects.equals(rolename, v0003.rolename) &&
-                Objects.equals(company, v0003.company) &&
-                Objects.equals(mobile, v0003.mobile) &&
                 Objects.equals(email, v0003.email) &&
-                Objects.equals(title, v0003.title) &&
-                Objects.equals(businessCard, v0003.businessCard) &&
-                Objects.equals(uType, v0003.uType);
+                Objects.equals(userType, v0003.userType) &&
+                Objects.equals(bmmc, v0003.bmmc) &&
+                Objects.equals(roleName, v0003.roleName);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(userno, username, passwd, roleno, bmdm, deltag, bmmc, rolename, company, mobile, email, title, businessCard, uType);
+        return Objects.hash(userNo, userName, passwd, roleId, bmId, deltag, email, userType, bmmc, roleName);
     }
 }

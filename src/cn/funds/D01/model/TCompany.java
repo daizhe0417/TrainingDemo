@@ -18,6 +18,9 @@ public class TCompany {
     private String deltag;
     private String tjr;
     private String foundDate;
+    private String sccl;
+    private Integer tyrs;
+    private String kaiguan;
 
     public Integer getId() {
         return id;
@@ -139,31 +142,57 @@ public class TCompany {
         this.foundDate = foundDate;
     }
 
+    public String getSccl() {
+        return sccl;
+    }
+
+    public void setSccl(String sccl) {
+        this.sccl = sccl;
+    }
+
+    public Integer getTyrs() {
+        return tyrs;
+    }
+
+    public void setTyrs(Integer tyrs) {
+        this.tyrs = tyrs;
+    }
+
+    public String getKaiguan() {
+        return kaiguan;
+    }
+
+    public void setKaiguan(String kaiguan) {
+        this.kaiguan = kaiguan;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TCompany company = (TCompany) o;
-        return Objects.equals(id, company.id) &&
-                Objects.equals(companyName, company.companyName) &&
-                Objects.equals(trace, company.trace) &&
-                Objects.equals(management, company.management) &&
-                Objects.equals(productCount, company.productCount) &&
-                Objects.equals(qualitativeScore, company.qualitativeScore) &&
-                Objects.equals(quantifyScore, company.quantifyScore) &&
-                Objects.equals(traceLink, company.traceLink) &&
-                Objects.equals(documentLink, company.documentLink) &&
-                Objects.equals(comment, company.comment) &&
-                Objects.equals(qualitativeLink, company.qualitativeLink) &&
-                Objects.equals(quantifyLink, company.quantifyLink) &&
-                Objects.equals(deltag, company.deltag) &&
-                Objects.equals(tjr, company.tjr) &&
-                Objects.equals(foundDate, company.foundDate);
+        TCompany tCompany = (TCompany) o;
+        return Objects.equals(id, tCompany.id) &&
+                Objects.equals(companyName, tCompany.companyName) &&
+                Objects.equals(trace, tCompany.trace) &&
+                Objects.equals(management, tCompany.management) &&
+                Objects.equals(productCount, tCompany.productCount) &&
+                Objects.equals(qualitativeScore, tCompany.qualitativeScore) &&
+                Objects.equals(quantifyScore, tCompany.quantifyScore) &&
+                Objects.equals(traceLink, tCompany.traceLink) &&
+                Objects.equals(documentLink, tCompany.documentLink) &&
+                Objects.equals(comment, tCompany.comment) &&
+                Objects.equals(qualitativeLink, tCompany.qualitativeLink) &&
+                Objects.equals(quantifyLink, tCompany.quantifyLink) &&
+                Objects.equals(deltag, tCompany.deltag) &&
+                Objects.equals(tjr, tCompany.tjr) &&
+                Objects.equals(foundDate, tCompany.foundDate) &&
+                Objects.equals(sccl, tCompany.sccl) &&
+                Objects.equals(tyrs, tCompany.tyrs) &&
+                Objects.equals(kaiguan, tCompany.kaiguan);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, companyName, trace, management, productCount, qualitativeScore, quantifyScore, traceLink, documentLink, comment, qualitativeLink, quantifyLink, deltag, tjr, foundDate);
+        return Objects.hash(id, companyName, trace, management, productCount, qualitativeScore, quantifyScore, traceLink, documentLink, comment, qualitativeLink, quantifyLink, deltag, tjr, foundDate, sccl, tyrs, kaiguan);
     }
 }

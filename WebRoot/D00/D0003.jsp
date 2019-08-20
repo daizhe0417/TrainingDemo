@@ -11,7 +11,7 @@
 	<div class="box-header with-border" id="dzToolBar">
 		<div class="row col-sm-8" id="queryFieldContainer">
 			<div class="col-sm-3">
-				<input id="query_userno" type="text" class="form-control input-sm" placeholder="登录名">
+				<input id="query_userno" type="text" class="form-control " placeholder="登录名">
 			</div>
 			<div class="col-sm-3">
 				<input id="query_username" type="text" class="form-control input-sm" placeholder="用户名称">
@@ -22,65 +22,50 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-			<div id="jqGridContainer" class="row">
-				<table id="jqGridList"></table>
-				<div id="jqGridPager"></div>
-			</div>
+		<div id="dzGridContainer" class="dataTables_wrapper form-inline dt-bootstrap">
 		</div>
 		<!-- /.tab-pane -->
 	</div>
 	<!-- /.tab-content -->
 </div>
 <div class="modal" id="detailDlg" style="display: none;">
-	<form id="showForm" name="showForm" method="post" action="">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span></button>
-					<h4 id="detailDlgTitleContainer" class="modal-title">Default Modal</h4>
-				</div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span></button>
+				<h4 id="detailDlgTitleContainer" class="modal-title">Default Modal</h4>
+			</div>
+			<form id="showForm" name="showForm" method="post" action="">
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="userno">登录名</label>
-						<input class="form-control" id="userno" name="userno">
+						<label for="userNo">登录名</label>
+						<input class="form-control" id="userNo" name="userNo" maxlength="20">
 					</div>
 					<div class="form-group">
-						<label for="username">用户名</label>
-						<input class="form-control" id="username" name="username">
+						<label for="userName">用户名</label>
+						<input class="form-control" id="userName" name="userName">
 					</div>
 					<div class="form-group">
-						<label for="company">工作单位</label>
-						<input class="form-control" id="company" name="company">
+						<label for="roleId">角色</label>
+						<select id="roleId" class="form-control input-sm" required>
+						</select>
 					</div>
 					<div class="form-group">
-						<label for="title">职务</label>
-						<input class="form-control" id="title" name="title">
-					</div>
-					<div class="form-group">
-						<label for="mobile">联系电话</label>
-						<input class="form-control" id="mobile" name="mobile">
-					</div>
-					<div class="form-group">
-						<label for="email">邮箱</label>
-						<input class="form-control" id="email" name="email">
-					</div>
-					<div class="form-group">
-						<label for="iptBusinessCardUploadFile">名片</label>
-						<div class="file-loading">
-							<input id="iptBusinessCardUploadFile" name="iptUploadFile[]" type="file">
-						</div>
+						<label for="bmId">部门</label>
+						<select id="bmId" class="form-control input-sm">
+						</select>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" id="detailDlgCloseBtn" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
-					<button type="button" id="detailDlgSaveBtn" class="btn btn-primary">保存</button>
-				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" id="detailDlgCloseBtn" class="btn btn-default pull-left" data-dismiss="modal">关闭
+				</button>
+				<button type="button" id="detailDlgSaveBtn" class="btn btn-primary">保存</button>
 			</div>
-			<!-- /.modal-content -->
 		</div>
-	</form>
+		<!-- /.modal-content -->
+	</div>
 	<!-- /.modal-dialog -->
 </div>
 <%@include file="../commonjs.jsp" %>

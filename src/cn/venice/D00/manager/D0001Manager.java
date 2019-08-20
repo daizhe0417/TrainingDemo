@@ -1,6 +1,7 @@
 package cn.venice.D00.manager;
 
 import cn.venice.D00.model.D0001;
+import cn.venice.D00.model.D0001Tmp;
 import cn.venice.util.manager.GenericManager;
 import cn.venice.util.model.SelectOptionModel;
 
@@ -47,4 +48,8 @@ public interface D0001Manager extends GenericManager {
      */
     String getBmmcByBmdm(String bmdm);
 
+
+    int saveAllNodes(List<D0001Tmp> list);
+
+    List<SelectOptionModel> getAllSOMClasses();
 }

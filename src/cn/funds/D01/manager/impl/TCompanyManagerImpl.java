@@ -62,6 +62,7 @@ public class TCompanyManagerImpl extends GenericManagerImpl implements
             tc.setQualitativeScore(d.getQualitativeScore());
             tc.setQuantifyScore(d.getQuantifyScore());
             tc.setTjr(d.getTjr());
+            tc.setKaiguan(d.getKaiguan());
             if (d.getDocumentLink() != null && !d.getDocumentLink().equals("")) {
                 tc.setDocumentLink(d.getDocumentLink());
             }

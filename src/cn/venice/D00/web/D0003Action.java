@@ -1,6 +1,7 @@
 package cn.venice.D00.web;
 
 import cn.venice.D00.manager.D0003Manager;
+import cn.venice.D00.model.D0001;
 import cn.venice.D00.model.D0003;
 import cn.venice.D00.model.V0003;
 import cn.venice.gen.model.PasswdModel;
@@ -94,7 +95,7 @@ public class D0003Action extends GenericAction {
         UserInfoModel v;
         try {
             v = userInfoService.getUserInfo();
-            int result = mgr.passwdmodify(d, v.getUserno());
+            int result = mgr.passwdmodify(d, v.getUserNo());
             if (result == D0003Manager.MODIFY_PASSWD_SUCCESS) {
                 return this.returnJSONSUCCESS();
             } else if (result == D0003Manager.MODIFY_PASSWD_FAILURE) {
@@ -117,7 +118,7 @@ public class D0003Action extends GenericAction {
      */
     public String resetPasswd() {
         D0003 d = (D0003) this.fromRequest(D0003.class);
-        if (mgr.resetPasswd(d.getUserno()) == ConstantClass.DZSUCCESS) {
+        if (mgr.resetPasswd(d.getUserNo()) == ConstantClass.DZSUCCESS) {
             return this.returnJSONSUCCESS();
         } else {
             return this.returnJSONFAILURE();
@@ -127,23 +128,19 @@ public class D0003Action extends GenericAction {
     @Override
     public String findById() {
         D0003 obj = (D0003) this.fromRequest(D0003.class);
-        V0003 d = mgr.findById(V0003.class, obj.getUserno());
+        V0003 d = mgr.findById(V0003.class, obj.getUserNo());
         if (d != null) {
             return this.returnDatas(d);
         }
         return this.returnJSONFAILURE();
     }
 
-    public String uploadFile() {
-        HttpServletRequest request = this.getRequest();
-        MultiPartRequestWrapper multipartRequest = (MultiPartRequestWrapper) request;
+    public String getSOMTeachers() {
+        return this.returnDatas(mgr.getSOMTeachers());
+    }
 
-        File[] files = multipartRequest.getFiles("iptUploadFile[]");
-
-        String basePath = request.getSession().getServletContext()
-                .getRealPath("");
-        String[] fileNames = multipartRequest.getFileNames("iptUploadFile[]");
-        String suffix = fileNames[0].substring(fileNames[0].lastIndexOf(".") + 1);
-        return this.returnDatas(mgr.uploadFile(this.getId(), this.getFileType(), files[0], basePath, suffix));
+    public String getStuByClassesId() {
+        D0003 d=(D0003)this.fromRequest(D0003.class);
+        return this.returnDatas(mgr.getStuByClassesId(d.getBmId()));
     }
 }

@@ -17,16 +17,19 @@
                     <form id="showForm" name="showForm" method="post" action="">
                         <div class="form-group">
                             <label for="passwd">原密码</label>
-                            <input class="form-control" required maxlength="6" minlength="6" id="passwd" name="passwd">
+                            <input type="password" class="form-control" required maxlength="6" minlength="6" id="passwd"
+                                   name="passwd">
                         </div>
                         <div class="form-group">
                             <label for="newpasswd">新密码</label>
-                            <input class="form-control" required maxlength="6" minlength="6" id="newpasswd"
+                            <input type="password" class="form-control" required maxlength="6" minlength="6"
+                                   id="newpasswd"
                                    name="newpasswd">
                         </div>
                         <div class="form-group">
                             <label for="newpasswd2">确认新密码</label>
-                            <input class="form-control" required maxlength="6" minlength="6" id="newpasswd2"
+                            <input type="password" class="form-control" required maxlength="6" minlength="6"
+                                   id="newpasswd2"
                                    name="newpasswd2">
                         </div>
                     </form>
@@ -93,7 +96,7 @@
     function toSaveCallBack(item) {
         if (item.status == '1') {
             alert('修改密码成功,请重新登录！');
-            top.location.href = "/dxManager/";
+            top.location = "/TrainingDemo/";
         } else {
             alert('重置密码失败,' + item.msg);
         }

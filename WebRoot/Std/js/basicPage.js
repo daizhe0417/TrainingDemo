@@ -1,17 +1,15 @@
-var jqGridConf = {
-    caption: "公司列表",
-    colNames: ['id', '基金公司名称', '状态', '成立时间', '管理规模', '产品数量', '定性得分', '定性得分表', '定量得分', '定量得分链接', '推荐人', '尽调报告', '原始资料', 'deltag'],
-    colModel: [{
+var dzGridConf = {
+    columns: [{
         name: 'id',
-        index: 'id',
+        fieldName: 'id',
         hidden: true
     }, {
-        name: 'companyName',
-        index: 'companyName',
+        name: '基金公司名称',
+        fieldName: 'companyName',
         width: 200
     }, {
-        name: 'trace',
-        index: 'trace',
+        name: '状态',
+        fieldName: 'trace',
         width: 80,
         formatter: function (cellvalue, options, rowObject) {
             if (cellvalue == '0') {
@@ -36,24 +34,47 @@ var jqGridConf = {
             }
         }
     }, {
-        name: 'foundDate',
-        index: 'foundDate',
+        name: '开关',
+        fieldName: 'kaiguan',
+        width: 80,
+        edittype: 'dzSwitch',
+        formatter: function (cellvalue, options, rowObject) {
+            if (cellvalue == '0') {
+                return "关闭";
+            } else if (cellvalue == '1') {
+                return "打开";
+            } else {
+                return "";
+            }
+        },
+        unformat: function (cellvalue, options, rowObject) {
+            if (cellvalue == '关闭') {
+                return "0";
+            } else if (cellvalue == '打开') {
+                return "1";
+            } else {
+                return "";
+            }
+        }
+    }, {
+        name: '成立时间',
+        fieldName: 'foundDate',
         width: 100
     }, {
-        name: 'management',
-        index: 'management',
+        name: '管理规模',
+        fieldName: 'management',
         width: 100
     }, {
-        name: 'productCount',
-        index: 'productCount',
+        name: '产品数量',
+        fieldName: 'productCount',
         width: 70
     }, {
-        name: 'qualitativeScore',
-        index: 'qualitativeScore',
+        name: '定性得分',
+        fieldName: 'qualitativeScore',
         width: 70
     }, {
-        name: 'qualitativeLink',
-        index: 'qualitativeLink',
+        name: '定性得分表',
+        fieldName: 'qualitativeLink',
         width: 100,
         formatter: function (cellvalue, options, rowObject) {
             // if (cellvalue != undefined && cellvalue != '') {
@@ -70,24 +91,24 @@ var jqGridConf = {
             //     }
         }
     }, {
-        name: 'quantifyScore',
-        index: 'quantifyScore',
+        name: '定量得分',
+        fieldName: 'quantifyScore',
         width: 70
     }, {
-        name: 'quantifyLink',
-        index: 'quantifyLink',
+        name: '定量得分链接',
+        fieldName: 'quantifyLink',
         width: 100,
         formatter: function (cellvalue, options, rowObject) {
-            console.log("cellvalue="+cellvalue);
+            // console.log("cellvalue="+cellvalue);
             if (cellvalue != undefined && cellvalue != '') {
                 // return "<a href='../" + cellvalue + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
-                return "<a href='../" + cellvalue.replace("\\","\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
+                return "<a href='../" + cellvalue.replace("\\", "\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
             } else {
                 return "";
             }
         },
         unformat: function (cellvalue, options, rowObject) {
-            console.log("cellvalue="+cellvalue);
+            // console.log("cellvalue="+cellvalue);
             if (cellvalue != "") {
                 return $(cellvalue).attr("href");
             } else {
@@ -95,17 +116,18 @@ var jqGridConf = {
             }
         }
     }, {
-        name: 'tjr',
-        index: 'tjr',
-        width: 80
+        name: '推荐人',
+        fieldName: 'tjr',
+        width: 80,
+        sortable: true
     }, {
-        name: 'traceLink',
-        index: 'traceLink',
+        name: '尽调报告',
+        fieldName: 'traceLink',
         width: 150,
         formatter: function (cellvalue, options, rowObject) {
             if (cellvalue != undefined && cellvalue != '') {
                 // return "<a href='../" + cellvalue + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
-                return "<a href='../" + cellvalue.replace("\\","\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
+                return "<a href='../" + cellvalue.replace("\\", "\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
             } else {
                 return "";
             }
@@ -118,13 +140,13 @@ var jqGridConf = {
             }
         }
     }, {
-        name: 'documentLink',
-        index: 'documentLink',
+        name: '原始资料',
+        fieldName: 'documentLink',
         width: 150,
         formatter: function (cellvalue, options, rowObject) {
             if (cellvalue != undefined && cellvalue != '') {
                 // return "<a href='../" + cellvalue + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
-                return "<a href='../" + cellvalue.replace("\\","\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
+                return "<a href='../" + cellvalue.replace("\\", "\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
             } else {
                 return "";
             }
@@ -138,14 +160,15 @@ var jqGridConf = {
         }
     }, {
         name: 'deltag',
-        index: 'deltag',
+        fieldName: 'deltag',
         hidden: true
     }]
 };
 
 var actionname = "D01_01action";
 jQuery(document).ready(function () {
-    $("#dzDataTable").initTable(jqGridConf);
+    // $("#dzDataTableContent").initTable(dzGridConf);
+    // $("#dzGridContainer").dzGrid("initTable", dzGridConf);
 
     commonInit({
         detailDlgWidth: 750,
@@ -211,6 +234,18 @@ jQuery(document).ready(function () {
         }]
     });
 
+    $("#kaiguan").dzSwitch({
+        onBtnValue: '打开',
+        offBtnValue: '关闭',
+        onChange: function (value) {
+            DzConfirm.alert(value);
+        }
+    });
+
+    // $("#kaiguan").on("change", function () {
+    //     DzConfirm.alert("onChange"+$(this).val());
+    // });
+
     // // 定性得分
     // $("#iptQualitativeLinkUploadFile").dzFileUpload({
     //     uploadExtraData: {
@@ -270,11 +305,12 @@ jQuery(document).ready(function () {
 
     $(":radio").prop("readonly", true);
 
-    $("#dingxingDlgExpBtn").on("click",onDingxingDlgExpBtn);
+    $("#dingxingDlgExpBtn").on("click", onDingxingDlgExpBtn);
 
 });
 
 function openDingxingDlg(id, name) {
+    console.log(id + "===" + name);
     var companyId = id || $("#id").val();
     if (companyId == undefined || companyId == '') {
         alert("请先选择公司");
@@ -303,7 +339,8 @@ function openDingxingDlg(id, name) {
 }
 
 function getDingxinByCompanyId_Callback(item) {
-    $(":radio[value='0']").prop("checked", true);
+    console.log(JSON.stringify(item));
+    $("#dingxingDlg :radio[value='0']").prop("checked", true);
     $("span[id^='score']").html("0");
     $("#totalScore").html("0");
 
@@ -354,8 +391,8 @@ function onDingxingDlgExpBtn() {
                 'style="display:block; max-height:600px;overflow-y: scroll;">' +
                 '<tbody>');
 
-        copyDom.attr("id","dingxingPdfContent");
-        copyDom.find(":radio").attr("name","");
+        copyDom.attr("id", "dingxingPdfContent");
+        copyDom.find(":radio").attr("name", "");
         copyDom.find("table").css("overflow-y", "visible");
         copyDom.height("3000px");
 

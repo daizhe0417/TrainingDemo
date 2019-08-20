@@ -3,33 +3,29 @@ package cn.venice.D00.model;
 import java.util.Objects;
 
 public class D0003 {
-    private String userno;
-    private String username;
+    private String userNo;
+    private String userName;
     private String passwd;
-    private String roleno;
-    private String bmdm;
+    private Integer roleId;
+    private Integer bmId;
     private String deltag;
-    private String company;
-    private String mobile;
     private String email;
-    private String title;
-    private String businessCard;
-    private String uType;
+    private String userType;
 
-    public String getUserno() {
-        return userno;
+    public String getUserNo() {
+        return userNo;
     }
 
-    public void setUserno(String userno) {
-        this.userno = userno;
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPasswd() {
@@ -40,20 +36,20 @@ public class D0003 {
         this.passwd = passwd;
     }
 
-    public String getRoleno() {
-        return roleno;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setRoleno(String roleno) {
-        this.roleno = roleno;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
-    public String getBmdm() {
-        return bmdm;
+    public Integer getBmId() {
+        return bmId;
     }
 
-    public void setBmdm(String bmdm) {
-        this.bmdm = bmdm;
+    public void setBmId(Integer bmId) {
+        this.bmId = bmId;
     }
 
     public String getDeltag() {
@@ -64,22 +60,6 @@ public class D0003 {
         this.deltag = deltag;
     }
 
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -88,28 +68,12 @@ public class D0003 {
         this.email = email;
     }
 
-    public String getTitle() {
-        return title;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBusinessCard() {
-        return businessCard;
-    }
-
-    public void setBusinessCard(String businessCard) {
-        this.businessCard = businessCard;
-    }
-
-    public String getuType() {
-        return uType;
-    }
-
-    public void setuType(String uType) {
-        this.uType = uType;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @Override
@@ -117,23 +81,19 @@ public class D0003 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         D0003 d0003 = (D0003) o;
-        return Objects.equals(userno, d0003.userno) &&
-                Objects.equals(username, d0003.username) &&
+        return Objects.equals(userNo, d0003.userNo) &&
+                Objects.equals(userName, d0003.userName) &&
                 Objects.equals(passwd, d0003.passwd) &&
-                Objects.equals(roleno, d0003.roleno) &&
-                Objects.equals(bmdm, d0003.bmdm) &&
+                Objects.equals(roleId, d0003.roleId) &&
+                Objects.equals(bmId, d0003.bmId) &&
                 Objects.equals(deltag, d0003.deltag) &&
-                Objects.equals(company, d0003.company) &&
-                Objects.equals(mobile, d0003.mobile) &&
                 Objects.equals(email, d0003.email) &&
-                Objects.equals(title, d0003.title) &&
-                Objects.equals(businessCard, d0003.businessCard) &&
-                Objects.equals(uType, d0003.uType);
+                Objects.equals(userType, d0003.userType);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(userno, username, passwd, roleno, bmdm, deltag, company, mobile, email, title, businessCard, uType);
+        return Objects.hash(userNo, userName, passwd, roleId, bmId, deltag, email, userType);
     }
 }

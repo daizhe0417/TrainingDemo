@@ -37,10 +37,6 @@ folder instead of downloading all of them to reduce the load. -->
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<link type="text/css" href="<%=request.getContextPath()%>/jqueryui/css/sysline-defaults/jquery-ui.min.css"
-      rel="stylesheet">
-<link type="text/css" href="<%=request.getContextPath()%>/jqgrid/css/ui.jqgrid.css" rel="stylesheet"/>
-<link type="text/css" href="<%=request.getContextPath()%>/jqgrid/css/ui.multiselect.css" rel="stylesheet"/>
 <link type="text/css" href="<%=request.getContextPath()%>/util/toastr/toastr.min.css" rel="stylesheet"/>
 
 <style>
@@ -68,3 +64,4 @@ folder instead of downloading all of them to reduce the load. -->
 <link type="text/css" href="<%=request.getContextPath()%>/plugins/ionslider/ion.rangeSlider.css" rel="stylesheet"/>
 <link type="text/css" href="<%=request.getContextPath()%>/plugins/ionslider/ion.rangeSlider.skinNice.css" rel="stylesheet"/>
 <link type="text/css" href="<%=request.getContextPath()%>/plugins/bootstrap-slider/slider.css" rel="stylesheet"/>
+<link type="text/css" href="<%=request.getContextPath()%>/plugins/dzTree/css/dzTree.css" rel="stylesheet"/>

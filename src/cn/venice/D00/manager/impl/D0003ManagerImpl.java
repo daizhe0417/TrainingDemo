@@ -12,6 +12,7 @@ import cn.venice.gen.service.UserInfoService;
 import cn.venice.util.common.ConstantClass;
 import cn.venice.util.manager.impl.GenericManagerImpl;
 import cn.venice.util.md5.MD5Util;
+import cn.venice.util.model.SelectOptionModel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,7 +38,7 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
     @Override
     public List<D0003> getAllSOMYhs() {
         return dao
-                .find("select new cn.venice.util.model.SelectOptionModel(userno,username) from D0003 where deltag!='1'");
+                .find("select new cn.venice.util.model.SelectOptionModel(userNo,userName) from D0003 where deltag!='1'");
     }
 
     /**
@@ -66,14 +67,17 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
                 // 默认密码
                 d.setPasswd(MD5Util.convertMD5(MD5Util
                         .string2MD5(GenericConstant.DEFAULT_PASSWD
-                                + d.getUserno())));
+                                + d.getUserNo())));
             } else {
-                D0003 tmp = dao.findById(D0003.class, d.getUserno());
-                if (d.getBusinessCard() == null || "".equals(d.getBusinessCard())) {
-                    d.setBusinessCard(tmp.getBusinessCard());
-                }
+                D0003 tmp = dao.findById(D0003.class, d.getUserNo());
                 d.setDeltag(tmp.getDeltag());
                 d.setPasswd(tmp.getPasswd());
+            }
+            // roleId=1,系统管理员;2,教师;3,学生
+            if (d.getRoleId().equals(1)) {
+                d.setUserType("1");
+            } else {
+                d.setUserType("2");
             }
             return dao.merge(d);
         } catch (Exception e) {
@@ -84,12 +88,13 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
 
     /**
      * 锁定用户
+     *
      * @return
      */
     @Override
     public <T> int delete(T entity) {
         D0003 d = (D0003) entity;
-        D0003 tmp = dao.findById(D0003.class, d.getUserno());
+        D0003 tmp = dao.findById(D0003.class, d.getUserNo());
         tmp.setDeltag("1");
         return dao.saveOrUpdate(tmp);
     }
@@ -101,7 +106,7 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
     public int resetPasswd(String userno) {
         D0003 d = dao.findById(D0003.class, userno);
         d.setPasswd(MD5Util.convertMD5(MD5Util
-                .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserno())));
+                .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserNo())));
         return dao.saveOrUpdate(d);
     }
 
@@ -111,7 +116,7 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
     @Override
     public int resetPasswd(D0003 d) {
         d.setPasswd(MD5Util.convertMD5(MD5Util
-                .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserno())));
+                .string2MD5(GenericConstant.DEFAULT_PASSWD + d.getUserNo())));
         return dao.saveOrUpdate(d);
     }
 
@@ -120,7 +125,7 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
      */
     @Override
     public int passwdmodify(PasswdModel passwd, String userno) {
-        String sql = "from D0003 where userno='"
+        String sql = "from D0003 where userNo='"
                 + userno
                 + "' and passwd='"
                 + MD5Util.convertMD5(MD5Util.string2MD5(passwd.getPasswd()
@@ -141,31 +146,25 @@ public class D0003ManagerImpl extends GenericManagerImpl implements
 
     /**
      * 激活用户
+     *
      * @return
      */
     @Override
     public int unLock(D0003 d) {
-        D0003 tmp = dao.findById(D0003.class, d.getUserno());
+        D0003 tmp = dao.findById(D0003.class, d.getUserNo());
         tmp.setDeltag("0");
         return dao.saveOrUpdate(tmp);
     }
 
+
     @Override
-    public String uploadFile(String id, String fileType, File file, String basePath, String suffix) {
-        String path = GenericConstant.BASE_PATH + ConstantClass.FILE_SEPARATOR;
-        switch (fileType) {
-            case GenericConstant.USER_MP:
-                path += GenericConstant.USER_MP;
-                break;
-            default:
-                path += GenericConstant.UPLOAD_DEFAULT;
-                break;
-        }
-        try {
-            return super.uploadFile(id, fileType, file, basePath, path, suffix);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "上传失败";
-        }
+    public List<SelectOptionModel> getSOMTeachers() {
+        return dao
+                .find("select new cn.venice.util.model.SelectOptionModel(userNo,userName) from D0003 where deltag='0' and roleId=2 order by userName");
+    }
+
+    @Override
+    public List getStuByClassesId(Integer id) {
+        return dao.find("from D0003 where bmId=? and deltag!='1' and roleId=3", id);
     }
 }

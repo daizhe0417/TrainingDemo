@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.funds.D01.model.TCompany" table="t_company" schema="funds">
+    <class name="cn.funds.D01.model.TCompany" table="t_company" schema="trainingDemo">
         <id name="id">
             <column name="id" sql-type="int(11)"/>
             <generator class="native"></generator>
@@ -49,7 +49,16 @@
             <column name="tjr" sql-type="varchar(255)"/>
         </property>
         <property name="foundDate">
-            <column name="FoundDate" sql-type="varchar(10)" length="10"/>
+            <column name="FoundDate" sql-type="varchar(50)" length="50"/>
+        </property>
+        <property name="sccl">
+            <column name="sccl" sql-type="varchar(255)"/>
+        </property>
+        <property name="tyrs">
+            <column name="tyrs" sql-type="int(11)"/>
+        </property>
+        <property name="kaiguan">
+            <column name="kaiguan" sql-type="varchar(255)"/>
         </property>
     </class>
 </hibernate-mapping>

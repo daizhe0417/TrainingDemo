@@ -1,19 +1,16 @@
-var jqGridConf = {
-	caption : "角色列表",
-	colNames : [ '角色代码', '角色名称' ],
-	colModel : [ {
-		name : 'roleno',
-		index : 'roleno',
+var dzGridConf = {
+    columns : [ {
+		name : '角色代码',
+        fieldName : 'roleId',
+		hidden : true
+	}, {
+		name : '角色名称',
+        fieldName : 'roleName',
 		width : 150,
 		editable : true,
-		editrules : {
-			required : true
-		}
-	}, {
-		name : 'rolename',
-		index : 'rolename',
-		width : 150,
-		editable : true
+        editrules : {
+            required : true
+        }
 	} ]
 };
 
@@ -22,8 +19,6 @@ jQuery(document).ready(function() {
 	commonInit({
 		detailDlgTitle : '角色',
 		deleteType : 'byObject',
-		readOnlyFields: ['roleno'],
-		idFieldName: 'roleno',
-		checkExist: true
+		checkExist: ['roleName']
 	});
 });

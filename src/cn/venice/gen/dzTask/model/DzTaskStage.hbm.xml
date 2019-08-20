@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.venice.gen.dzTask.model.DzTaskStage" table="dz_task_stage" schema="trainingDemo">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/><generator class="native"></generator>
+        </id>
+        <property name="taskId">
+            <column name="taskId" sql-type="int(255)"/>
+        </property>
+        <property name="stage">
+            <column name="stage" sql-type="int(11)"/>
+        </property>
+        <property name="startTime">
+            <column name="startTime" sql-type="varchar(19)" length="19"/>
+        </property>
+        <property name="endTime">
+            <column name="endTime" sql-type="varchar(19)" length="19"/>
+        </property>
+        <property name="userList">
+            <column name="userList" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="finishedUsers">
+            <column name="finishedUsers" sql-type="varchar(255)"/>
+        </property>
+        <property name="stageName">
+            <column name="stageName" sql-type="varchar(255)"/>
+        </property>
+        <property name="stageDisplayName">
+            <column name="stageDisplayName" sql-type="varchar(500)" length="500"/>
+        </property>
+        <property name="finishType">
+            <column name="finishType" sql-type="varchar(255)"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -9,7 +9,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <title>据兴科技</title>
+    <title>教学项目</title>
     <link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -45,7 +45,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <%--<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>--%>
+    <%--<script src="util/jquery/jquery-2.2.3.min.js"></script>--%>
 
 
 </head>
@@ -56,9 +56,9 @@
         <!-- Logo -->
         <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>据兴</b>科技</span>
+            <span class="logo-mini"><b>教学项目</b>实验室</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>据兴</b>科技</span>
+            <span class="logo-lg"><b>教学项目</b>实验室</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -88,7 +88,7 @@
                     <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>超级管理员</p>
+                    <p><%= ((UserInfoModel) session.getAttribute(ConstantClass.LOGIN_USER_SESSION_ID)).getUserName()%></p>
                     <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
                 </div>
             </div>
@@ -347,7 +347,7 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.3.8
         </div>
-        <strong>Copyright &copy; 2017-2018 <a href="#">据兴科技</a>.</strong> All rights
+        <strong>Copyright &copy; 2017-2018 <a href="#">网络攻防</a>.</strong> All rights
         reserved.
     </footer>
 
@@ -355,7 +355,8 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 2.2.3 -->
-<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="util/jquery/jquery-2.2.3.min.js"></script>
+<script src="plugins/dzConfirm/dzConfirm.js"></script>
 <script src="common/ajax.js"></script>
 <script type="text/javascript">
     var currentTab = "homePage";
@@ -371,9 +372,10 @@
                         var id = menuList[i].menuid;
                         var text = menuList[i].text;
                         var url = menuList[i].url == undefined ? '' : menuList[i].url;
+                        var targetStr = menuList[i].target ? ('target="' + menuList[i].target + '"') : '';
                         if (id.length == 2) {
                             treeObj.append('<li class="treeview closed" id="menu_' + id + '">' +
-                                '<a url="' + url + '" id="' + id + '" text="' + text + '">' +
+                                '<a url="' + url + '" id="' + id + '" text="' + text + '" ' + targetStr + '>' +
                                 '<i class="fa fa-dashboard"></i>' +
                                 '<span>' + text + '</span>' +
                                 '<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>' +
@@ -383,11 +385,11 @@
                             var parentMenu = $("#menu_" + id.substring(0, id.length - 2));
                             var ul = parentMenu.children("treeview-menu");
                             if (ul.length > 0) {
-                                ul.append('<li id="menu_' + id + '" class="treeview"><a url="' + url + '" id="' + id + '" text="' + text + '"><i class="fa fa-circle-o"></i>' + text + '</a></li>');
+                                ul.append('<li id="menu_' + id + '" class="treeview"><a url="' + url + '" id="' + id + '" text="' + text + '"' + targetStr + '><i class="fa fa-circle-o"></i>' + text + '</a></li>');
                             } else {
                                 parentMenu.children("a").append('<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>');
                                 parentMenu.append('<ul class="treeview-menu">' +
-                                    '<li id="menu_' + id + '" class="treeview"><a url="' + url + '" id="' + id + '" text="' + text + '"><i class="fa fa-circle-o"></i>' + text + '</a></li>' +
+                                    '<li id="menu_' + id + '" class="treeview"><a url="' + url + '" id="' + id + '" text="' + text + '"' + targetStr + '><i class="fa fa-circle-o"></i>' + text + '</a></li>' +
                                     '</ul>');
                             }
                         }
@@ -409,6 +411,10 @@
                     // $.AdminLTE.tree('.sidebar');
                     treeObj.find('a').each(function () {
                         $(this).on("click", function () {
+                            if ($(this).attr("target") == 'blank') {
+                                window.open($(this).attr('url'));
+                                return;
+                            }
                             var url = $(this).attr('url');
                             if (url == '') {
                                 return;
@@ -449,6 +455,9 @@
                         });
                     });
                 }
+            },
+            error:function (item) {
+                DzConfirm.alert("暂无用户权限设置");
             }
         });
         $("#li_tab_closeAllTab").on("click", function () {
@@ -506,12 +515,20 @@
         $("#tab_" + id).addClass("active");
         currentTab = id;
     }
-</script>
-<!-- jQuery UI 1.11.4 -->
-<script src="<%=request.getContextPath()%>/plugins/jQueryUI/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button);
+
+    function resizeTab() {
+        console.log("resizeTab");
+        // alert("resizeTab"+$(this).contents().find("body").height());
+        $(".nav-tabs li").each(function () {
+            if ($(this).hasClass("active")) {
+                var id = $(this).attr("id").replace("li_tab_", "");
+                console.log("id = " + id);
+                console.log($("#iframe_" + id).contents().find("body").height());
+                $("#iframe_" + id).height($("#iframe_" + id).contents().find("body").height() + 10);
+                $("#tab_" + id).height($("#iframe_" + id).contents().find("body").height() + 10);
+            }
+        });
+    }
 </script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>

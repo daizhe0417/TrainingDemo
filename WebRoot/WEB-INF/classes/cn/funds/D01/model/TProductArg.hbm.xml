@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.funds.D01.model.TProductArg" table="t_product_arg" schema="funds">
+        <composite-id>
+
+            <key-property name="index">
+                <column name="index" sql-type="bigint(20)" not-null="true"/>
+            </key-property>
+            <key-property name="productId">
+                <column name="ProductId" sql-type="bigint(20)" not-null="true"/>
+            </key-property>
+            <key-property name="benchmarkId">
+                <column name="benchmarkId" sql-type="bigint(20)" not-null="true"/>
+            </key-property>
+            <key-property name="cutOffDate">
+                <column name="CutOffDate" sql-type="text" not-null="true"/>
+            </key-property>
+            <key-property name="ljjz">
+                <column name="ljjz" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="annualIncome">
+                <column name="AnnualIncome" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="sharpRatio">
+                <column name="SharpRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="maxRetracement">
+                <column name="MaxRetracement" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="informationRatio">
+                <column name="InformationRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="treynorRatio">
+                <column name="TreynorRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="sortinoRatio">
+                <column name="SortinoRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="implementBeta">
+                <column name="ImplementBeta" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="mSquare">
+                <column name="MSquare" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="omegaRatio">
+                <column name="OmegaRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="kurtosis">
+                <column name="Kurtosis" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="skewness">
+                <column name="Skewness" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="jasenRatio">
+                <column name="JasenRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="annualRisk">
+                <column name="AnnualRisk" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="yingkuiRatio">
+                <column name="yingkuiRatio" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="maxRetracementPeriod">
+                <column name="MaxRetracementPeriod" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="dwjz">
+                <column name="dwjz" sql-type="double" precision="-1" not-null="true"/>
+            </key-property>
+            <key-property name="score">
+                <column name="Score" sql-type="bigint(20)" not-null="true"/>
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

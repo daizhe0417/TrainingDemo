@@ -116,7 +116,7 @@
 
 
 <!-- Javascript -->
-<script type="text/javascript" src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="util/jquery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="home_assets/plugins/bootstrap-hover-dropdown.min.js"></script>
 <script type="text/javascript" src="home_assets/plugins/back-to-top.js"></script>

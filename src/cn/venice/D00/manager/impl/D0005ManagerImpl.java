@@ -51,7 +51,7 @@ public class D0005ManagerImpl extends GenericManagerImpl implements
                 && session.getAttribute(ConstantClass.LOGIN_USER_SESSION_ID) != null) {
             UserInfoModel v = (UserInfoModel) session
                     .getAttribute(ConstantClass.LOGIN_USER_SESSION_ID);
-            return this.getRightsByRoleno(v.getRoleno());
+            return this.getRightsByRoleno(v.getRoleNo());
         } else {
             return null;
         }

@@ -4,6 +4,7 @@ import cn.venice.D00.model.D0003;
 import cn.venice.gen.model.PasswdModel;
 import cn.venice.util.manager.GenericManager;
 import cn.venice.util.model.ColumnModel;
+import cn.venice.util.model.SelectOptionModel;
 
 import java.io.File;
 import java.util.List;
@@ -26,5 +27,7 @@ public interface D0003Manager extends GenericManager {
 
     int unLock(D0003 d);
 
-    String uploadFile(String id, String fileType, File file, String basePath, String suffix);
+    List<SelectOptionModel> getSOMTeachers();
+
+    List getStuByClassesId(Integer id);
 }

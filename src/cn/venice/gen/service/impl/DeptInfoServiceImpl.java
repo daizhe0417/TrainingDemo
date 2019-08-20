@@ -32,7 +32,7 @@ public class DeptInfoServiceImpl implements DeptInfoService {
 	@Override
 	public List<D0001> getAllDepts(Integer level) {
 		List<D0001> deptsList = d0001mgr.getAllDepts();
-		return trimZero(deptsList);
+		return deptsList;
 	}
 
 	/**
@@ -44,32 +44,6 @@ public class DeptInfoServiceImpl implements DeptInfoService {
 	@Override
 	public List<D0001> getAuthDeptsBySession(Integer level, HttpSession session) {
 		return d0001mgr.getAllDepts();
-	}
-
-	/**
-	 * 过滤部门列表中bmdm后部两位一组的00
-	 * 
-	 * @param List
-	 *            <D0001> list
-	 * @return List<D0001>去掉bmdm后00的部门列表
-	 */
-	private List<D0001> trimZero(List<D0001> list) {
-		if (list != null && !list.isEmpty()) {
-			for (int i = 0; i < list.size(); i++) {
-				D0001 d = (D0001) list.get(i);
-				String bmdm = d.getBmdm();
-				while (bmdm.length() > 2 && !bmdm.equals("00")) {
-					if (bmdm.substring(bmdm.length() - 2, bmdm.length())
-							.equals("00")) {
-						bmdm = bmdm.substring(0, bmdm.length() - 2);
-					} else {
-						break;
-					}
-				}
-				d.setBmdm(bmdm);
-			}
-		}
-		return list;
 	}
 
 }

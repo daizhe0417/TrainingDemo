@@ -54,5 +54,11 @@ public interface GenericConstant {
 
     String DAILY_TRANS_LIST = "daily_trans_list";
 
+    int ERR_CODE_TASK_NOT_FOUND = -2;
+    int ERR_CODE_LAST_STAGE_FOUND = -3;
+    int ERR_CODE_STAGE_OUT_OF_BOUND = -4;
+    int ERR_CODE_TASK_HAS_STARTED = -5;
+    int ERR_CODE_NULL_POINT = -6;
+
 
 }

@@ -11,10 +11,7 @@
 	<div class="box-header with-border" id="dzToolBar">
 		<div class="row col-sm-8" id="queryFieldContainer">
 			<div class="col-sm-3">
-				<input id="query_roleno" type="text" class="form-control input-sm" placeholder="角色代码">
-			</div>
-			<div class="col-sm-3">
-				<input id="query_rolename" type="text" class="form-control input-sm" placeholder="角色名称">
+				<input id="query_rolename" type="text" class="form-control " placeholder="角色名称">
 			</div>
 		</div>
 		<div class="pull-right" id="toolBarBtnContainer">
@@ -22,11 +19,7 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-			<div id="jqGridContainer" class="row">
-				<table id="jqGridList"></table>
-				<div id="jqGridPager"></div>
-			</div>
+		<div id="dzGridContainer" class="dataTables_wrapper form-inline dt-bootstrap">
 		</div>
 		<!-- /.tab-pane -->
 	</div>
@@ -43,12 +36,8 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="roleno">角色代码</label>
-						<input class="form-control" required title="不能为空" id="roleno" name="roleno">
-					</div>
-					<div class="form-group">
-						<label for="rolename">角色名称</label>
-						<input class="form-control" id="rolename" name="rolename">
+						<label for="roleName">角色名称</label>
+						<input class="form-control" required title="不能为空" id="roleName" name="roleName">
 					</div>
 				</div>
 				<div class="modal-footer">

@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>据兴科技</title>
+    <title>教学项目</title>
     <link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
     <%@include file="commoncss.jsp" %>
 </HEAD>
@@ -34,16 +34,16 @@
                         <div>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
-                                <input type="text" id="userno" class="form-control" placeholder="登录名">
+                                <input type="text" id="userNo" class="form-control" placeholder="登录名">
                             </div>
-                            <span id="usernoErrMsg" class="help-block">&nbsp;</span>
+                            <span id="userNoErrMsg" class="help-block">&nbsp;</span>
                         </div>
                         <div>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
-                                <input type="text" id="username" class="form-control" placeholder="用户名">
+                                <input type="text" id="userName" class="form-control" placeholder="用户名">
                             </div>
-                            <span id="usernameErrMsg" class="help-block">&nbsp;</span>
+                            <span id="userNameErrMsg" class="help-block">&nbsp;</span>
                         </div>
                         <div>
                             <div class="input-group">
@@ -144,7 +144,7 @@
         </div>
     </div>
 </div>
-<%--<script src="<%=request.getContextPath()%>/plugins/jQuery/jquery-2.2.3.min.js"></script>--%>
+<%--<script src="<%=request.getContextPath()%>/util/jquery/jquery-2.2.3.min.js"></script>--%>
 <%--<script src="<%=request.getContextPath()%>/bootstrap/js/bootstrap.min.js"></script>--%>
 <%--<script src="<%=request.getContextPath()%>/util/bootstrap-fileinput/js/fileinput.min.js"></script>--%>
 <%--<script src="<%=request.getContextPath()%>/util/bootstrap-fileinput/js/locales/zh.js"></script>--%>
@@ -171,7 +171,7 @@
         $("#btnPreStep").on("click", setStep1);
         $("#btnRegist").on("click", toRegist);
 
-        $("#userno").on("change", findById);
+        $("#userNo").on("change", findById);
 
         $("#businessCardUploadFile").dzFileUpload({
             uploadExtraData: {
@@ -198,7 +198,7 @@
 
     function findById() {
         var req = {
-            userno: $("#userno").val()
+            userNo: $("#userNo").val()
         };
         var rm = {
             reqJsonStr: JSON.stringify(req)
@@ -214,12 +214,12 @@
                 console.log("success" + JSON.stringify(item));
                 var obj = jQuery.parseJSON(item);
                 if (obj.status == 1) {
-                    $("#userno").parent().parent().removeClass("has-error");
-                    $("#usernoErrMsg").html("&nbsp;");
+                    $("#userNo").parent().parent().removeClass("has-error");
+                    $("#userNoErrMsg").html("&nbsp;");
                     $("#btnNextStep").prop("disabled", false);
                 } else {
-                    $("#userno").parent().parent().addClass("has-error");
-                    $("#usernoErrMsg").html(obj.msg);
+                    $("#userNo").parent().parent().addClass("has-error");
+                    $("#userNoErrMsg").html(obj.msg);
                     $("#btnNextStep").prop("disabled", true);
                 }
             },
@@ -227,12 +227,12 @@
                 console.log("error" + JSON.stringify(item));
                 var obj = jQuery.parseJSON(item);
                 if (obj.status == 1) {
-                    $("#userno").parent().parent().removeClass("has-error");
-                    $("#usernoErrMsg").html("&nbsp;");
+                    $("#userNo").parent().parent().removeClass("has-error");
+                    $("#userNoErrMsg").html("&nbsp;");
                     $("#btnNextStep").prop("disabled", false);
                 } else {
-                    $("#userno").parent().parent().addClass("has-error");
-                    $("#usernoErrMsg").html(obj.msg);
+                    $("#userNo").parent().parent().addClass("has-error");
+                    $("#userNoErrMsg").html(obj.msg);
                     $("#btnNextStep").prop("disabled", true);
                 }
             }
@@ -240,11 +240,11 @@
     }
 
     function clearErrMsg() {
-        jQuery("#userno").parent().parent().removeClass("has-error");
-        jQuery("#usernoErrMsg").html("&nbsp;");
+        jQuery("#userNo").parent().parent().removeClass("has-error");
+        jQuery("#userNoErrMsg").html("&nbsp;");
 
-        jQuery("#username").parent().parent().removeClass("has-error");
-        jQuery("#usernameErrMsg").html("&nbsp;");
+        jQuery("#userName").parent().parent().removeClass("has-error");
+        jQuery("#userNameErrMsg").html("&nbsp;");
 
         jQuery("#company").parent().parent().removeClass("has-error");
         jQuery("#companyErrMsg").html("&nbsp;");
@@ -275,8 +275,8 @@
             //     return false;
             // }
             var req = {
-                userno: jQuery("#userno").val(),
-                username: jQuery("#username").val(),
+                userNo: jQuery("#userNo").val(),
+                userName: jQuery("#userName").val(),
                 passwd: jQuery("#passwd").val(),
                 company: jQuery("#company").val(),
                 mobile: jQuery("#mobile").val(),
@@ -329,16 +329,16 @@
             return false;
         }
 
-        if (jQuery("#userno").val() == undefined
-            || jQuery("#userno").val() == "") {
-            jQuery("#userno").parent().parent().addClass("has-error");
-            jQuery("#usernoErrMsg").html("登录名不能为空！");
+        if (jQuery("#userNo").val() == undefined
+            || jQuery("#userNo").val() == "") {
+            jQuery("#userNo").parent().parent().addClass("has-error");
+            jQuery("#userNoErrMsg").html("登录名不能为空！");
             return false;
         }
-        if (jQuery("#username").val() == undefined
-            || jQuery("#username").val() == "") {
-            jQuery("#username").parent().parent().addClass("has-error");
-            jQuery("#usernameErrMsg").html("用户名不能为空！");
+        if (jQuery("#userName").val() == undefined
+            || jQuery("#userName").val() == "") {
+            jQuery("#userName").parent().parent().addClass("has-error");
+            jQuery("#userNameErrMsg").html("用户名不能为空！");
             return false;
         }
         if (jQuery("#company").val() == undefined

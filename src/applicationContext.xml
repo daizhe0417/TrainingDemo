@@ -64,7 +64,7 @@
                     org.hibernate.dialect.MySQLDialect
                 </prop>
                 <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/funds</prop>
+                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/trainingDemo</prop>
                 <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
             </props>
         </property>
@@ -79,6 +79,28 @@
                 <value>cn/venice/D00/model/D0004.hbm.xml</value>
                 <value>cn/venice/D00/model/D0005.hbm.xml</value>
                 <value>cn/venice/D00/model/D0011.hbm.xml</value>
+
+                <value>cn/venice/gen/dzTask/model/DzTask.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzTaskStage.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzTaskStageUser.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzTaskVariable.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzVTaskCurr.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzVTaskStatus.hbm.xml</value>
+                <value>cn/venice/gen/dzTask/model/DzVTaskStageUser.hbm.xml</value>
+
+                <value>cn/funds/D01/model/TCompany.hbm.xml</value>
+                <value>cn/funds/D01/model/VCompany.hbm.xml</value>
+                <value>cn/funds/D01/model/TManagement.hbm.xml</value>
+                <value>cn/funds/D01/model/VManagement.hbm.xml</value>
+                <value>cn/funds/D01/model/TProduct.hbm.xml</value>
+                <value>cn/funds/D01/model/VProduct.hbm.xml</value>
+                <value>cn/funds/D01/model/Productnet.hbm.xml</value>
+                <value>cn/funds/D01/model/VProductnet.hbm.xml</value>
+                <value>cn/funds/D01/model/Benchmark.hbm.xml</value>
+                <value>cn/funds/D01/model/BenchmarkValue.hbm.xml</value>
+                <value>cn/funds/D01/model/VBenchmark.hbm.xml</value>
+                <value>cn/funds/D01/model/DingxingTable.hbm.xml</value>
+                <value>cn/funds/D01/model/TProductArg.hbm.xml</value>
 
             </list>
         </property>

@@ -32,9 +32,10 @@ var pagerModel = {
 
 // 分页请求参数
 var pagerReq = {
-    "pageNum": 1,
-    "rowsPerPage": 20,
-    "param": []
+    pageNum: 1,
+    rowsPerPage: 20,
+    param: [],
+    orderByStr: ''
 };
 
 // 查询条件参数
@@ -86,9 +87,14 @@ var default_btnClass = [
     'btn-success',
     'btn-primary'
 ];
+
+function onSelectRow() {
+}
+
 var formValidTag = true;
 var stopSaveSubmit = false;
-var jqGridConf = {};
+// var jqGridConf = {};
+var dzGridConf = {};
 // dzGlobal.selectedRowIds=dzGlobal.selectedRowIds||{};
 var selectedRowIds = ",";
 var conf = {
@@ -100,10 +106,13 @@ var conf = {
     toolbarBtnShowNumber: 5,                        // 工具栏按钮直接显示的个数
     defaultQueryStatement: [],                      // 附加的查询条件
     formName: "showForm",                           // 默认的表单id
-
+    formEditable: true,                             // 表单是否允许编辑，不允许编辑时，修改按钮不可用，双击表格打开详情对话框，所有字段只读，对话框保存按钮隐藏
+    notClearFields: "",
     detailDlgId: "detailDlg",                       // 编辑对话框id
     detailDlgWidth: 550,                            // 编辑对话框宽度
     detailDlgTitleContainer: "detailDlgTitleContainer",
+    detailDlgSaveBtnId: 'detailDlgSaveBtn',
+    detailDlgCloseBtnId: 'detailDlgCloseBtn',
     detailDlgTitle: "",                 // 编辑对话框的标题，”新建“、”修改“等自动添加，这里仅需”部门“、”用户“等
     // detailDlsAutoOpen: false,
     // detailDlgModal: true,
@@ -119,7 +128,7 @@ var conf = {
     //     text: "取消",
     //     click: detailDlgCancelBtnAction
     // }],
-
+    queryMethodName: 'query',
     // TODO 似乎无用了
     queryBarOn: true,                               // 是否需要筛选条件框
     // TODO 功能待修改
@@ -131,7 +140,7 @@ var conf = {
     //     filterFieldName: 'bmdm',
     //     fieldDisplayName: '部门'
     // },
-
+    dzGridContainer: "dzGridContainer",             // 新表格的容器dom组件ID
 
     deleteType: 'ById',                             // 删除方式，默认按照主键删除
     // TODO 应该可以取消，在jqgrid中设置
@@ -141,28 +150,28 @@ var conf = {
 
     // TODO 待修改
     validateSetting: {
-        errorElement: "em",
-        errorPlacement: function (error, element) {
-            // Add the `help-block` class to the error element
-            error.addClass("help-block");
-
-            if (element.prop("type") === "checkbox") {
-                error.insertAfter(element.parent("label"));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
-        }
+        // errorElement: "em",
+        // errorPlacement: function (error, element) {
+        //     // Add the `help-block` class to the error element
+        //     error.addClass("help-block");
+        //
+        //     if (element.prop("type") === "checkbox") {
+        //         error.insertAfter(element.parent("label"));
+        //     } else {
+        //         error.insertAfter(element);
+        //     }
+        // },
+        // highlight: function (element, errorClass, validClass) {
+        //     $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+        // },
+        // unhighlight: function (element, errorClass, validClass) {
+        //     $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+        // }
     },
 
     // autoFilled: true,                            // 设置页面自动适应，已取消
 
-    checkExist: false                               // 如果指定了idFieldName，且本参数为true时，当id字段change时，自动调用action中的findById方法查找是否已有该记录，有则取出并填充字段，无则什么也不做
+    checkExist: []                                  // 如果指定了idFieldName，且本参数为true时，当id字段change时，自动调用action中的findById方法查找是否已有该记录，有则取出并填充字段，无则什么也不做；修改为：本字段列出的字段名onChange时，调用后台的findById方法，检查的内容由后台代码定义
 };
 
 // 表单修改标记
@@ -210,8 +219,10 @@ function commonInit(setting) {
     // 初始化工具栏
     toolBarInit();
 
+    dzGridInit();
+
     // jqGrid的默认设置
-    jqGridInit();
+    // jqGridInit();
 
     // 详细信息对话框的默认设置
     detailDlgInit();
@@ -228,7 +239,7 @@ function commonInit(setting) {
     // }
     // };
 
-    validator = jQuery("#" + conf.formName).validate(conf.validateSetting);
+    // validator = jQuery("#" + conf.formName).validate(conf.validateSetting);
 
     // jQuery.datepicker.setDefaults(jQuery.datepicker.regional['zh-CN']);
 
@@ -246,7 +257,7 @@ function commonInit(setting) {
 
     repeatedSubmitInit();
 
-    if (conf.checkExist) {
+    if (conf.checkExist.length > 0) {
         bindToCheckExist();
     }
 
@@ -260,39 +271,42 @@ function commonInit(setting) {
         onclick: null
     };
 
+    initValid();
+
 }
 
-$.validator.setDefaults({
-    submitHandler: function () {
-        // modify by d62 140820
-        // alert("submitted!");
-    },
-    showErrors: function (map, list) {
-        // there's probably a way to simplify this
-        var focussed = document.activeElement;
-        if (focussed && $(focussed).is("input, textarea,select")) {
-            $(this.currentForm).tooltip("close", {
-                currentTarget: focussed
-            }, true)
-        }
-        this.currentElements.removeAttr("title").parent().removeClass(
-            "has-error");
-        $.each(list, function (index, error) {
-            // $(error.element).attr("title", error.message).addClass(
-            //     "ui-state-highlight");
-            $(error.element).attr("title", error.message).parent().addClass(
-                "has-error");
-            $(error.element).tooltip();
-            // $(error.element).popover({title: error.message, "show": "show"});
-        });
-        if (focussed && $(focussed).is("input, textarea,select")) {
-            $(this.currentForm).tooltip("open", {
-                target: focussed,
-                zIndex: 2000
-            });
-        }
-    }
-});
+// $.validator.setDefaults({
+//     submitHandler: function () {
+//         // modify by d62 140820
+//         // alert("submitted!");
+//     },
+//     showErrors: function (map, list) {
+//         // there's probably a way to simplify this
+//         var focussed = document.activeElement;
+//         // if (focussed && $(focussed).is("input, textarea")) {
+//         //     $(this.currentForm).tooltip("close", {
+//         //         currentTarget: focussed
+//         //     }, true)
+//         // }
+//         this.currentElements.removeAttr("title").parent().removeClass(
+//             "has-error");
+//         $.each(list, function (index, error) {
+//             console.log(index+"===="+error);
+//             // $(error.element).attr("title", error.message).addClass(
+//             //     "ui-state-highlight");
+//             $(error.element).attr("title", error.message).parent().addClass(
+//                 "has-error");
+//             // $(error.element).tooltip();
+//             // $(error.element).popover({title: error.message, "show": "show"});
+//         });
+//         // if (focussed && $(focussed).is("input, textarea")) {
+//         //     $(this.currentForm).tooltip("open", {
+//         //         target: focussed,
+//         //         zIndex: 2000
+//         //     });
+//         // }
+//     }
+// });
 
 // =========================================================================
 // ================================= 初始化 =================================
@@ -311,6 +325,11 @@ function toolBarInit() {
         var otherBtns = [];
         // 添加按钮
         for (var i = 0, activeNum = 0; i < conf.toolbar_btns.length; i++) {
+            if (!conf.formEditable) {
+                if (conf.toolbar_btns[i].id == 'modBtn') {
+                    continue;
+                }
+            }
             if (conf.toolbar_btns[i].active) {
                 if (activeNum < conf.toolbarBtnShowNumber) {
                     $("#" + conf.toolBarBtnContainer).append('<button type="button" id="' + conf.toolbar_btns[i].id + '" class="btn btn-sm btn-default">' + conf.toolbar_btns[i].value + '</button>');
@@ -390,8 +409,8 @@ function toolBarInit() {
             $("#impBtn").attr("data-toggle", "modal").attr("data-target", "#uploadModal");
 
             var importColumns = [];
-            for (var i = 0; i < jqGridConf.colNames.length; i++) {
-                importColumns.push({"name": jqGridConf.colNames[i], "id": jqGridConf.colModel[i].name})
+            for (var i = 0; i < dzGridConf.columns.length; i++) {
+                importColumns.push({"name": dzGridConf.columns[i].name, "id": dzGridConf.columns[i].fieldName})
             }
 
             $("#iptUploadFile").fileinput({
@@ -426,68 +445,87 @@ function toolBarInit() {
     }
 }
 
+function dzGridInit() {
+    // console.log("dzGrdiCommonConf"+JSON.stringify(dzGrdiCommonConf));
+    // console.log("dzGridConf"+JSON.stringify(dzGridConf));
+    $("#" + conf.dzGridContainer).dzGrid($.extend(dzGrdiCommonConf, {
+        goPageFun: goPageFun,
+        onSelectRow: onSelectRow
+    }, dzGridConf));
+}
+
 // =========================================================================
 
 /**
  * jqGrid的默认设置
  */
-function jqGridInit() {
-    if (jQuery("#jqGridList").length > 0 && jqGridConf != undefined) {
-        // 定义一个jqGrid的通用配置方法，放在commInit里，需要自定义的在这里重载即可
-        jQuery("#jqGridList").jqGrid(
-            jQuery.extend(jqGridCommonConf, jqGridConf));
-
-        jQuery("#jqGridList").jqGrid('navGrid', '#jqGridPager', {
-            edit: false,
-            add: false,
-            del: false,
-            search: false,
-            refresh: false
-        }).setGridWidth($("#jqGridContainer").parent().width()).jqGrid('setFrozenColumns');
-        ;
-        $("#jqGridContainer").css("padding-left", "15px");
-    }
-
-    // $(".ui-jqgrid .ui-jqgrid-titlebar").css({"padding": ".4rem", "font-size": "1.4rem"});
-    // jQuery("#gbox_jqGridList").width(jQuery("#example1_wrapper").width() - 4);
-    // jQuery(".ui-jqgrid-view").width(jQuery("#example1_wrapper").width() - 4);
-    // jQuery(".ui-jqgrid-hdiv").width(jQuery("#example1_wrapper").width() - 4);
-    // jQuery(".ui-jqgrid-pager").width(jQuery("#example1_wrapper").width() - 4);
-
-    // jQuery("#gbox_jqGridList").width(jQuery("#jqGridList").parent().width() - 34);
-    // jQuery(".ui-jqgrid-view").width(jQuery("#jqGridList").parent().width() - 34);
-    // jQuery(".ui-jqgrid-hdiv").width(jQuery("#jqGridList").parent().width() - 34);
-    // jQuery(".ui-jqgrid-pager").width(jQuery("#jqGridList").parent().width() - 34);
-    // jQuery(".jqgrow").height("26px");
-    //
-    jQuery(".ui-jqgrid-titlebar-close").hide();
-    //
-    //
-    // jQuery("#jqGridContainer").css("margin", "2px");
-    // jQuery("#jqGridContainer").css("padding-right", "16px");
-    // jQuery("#jqGridContainer").css("padding-left", "6px");
-
-    pagerInit();
-
-}
+// function jqGridInit() {
+//     if (jQuery("#jqGridList").length > 0 && jqGridConf != undefined) {
+//         // 定义一个jqGrid的通用配置方法，放在commInit里，需要自定义的在这里重载即可
+//         jQuery("#jqGridList").jqGrid(
+//             jQuery.extend(jqGridCommonConf, jqGridConf));
+//
+//         jQuery("#jqGridList").jqGrid('navGrid', '#jqGridPager', {
+//             edit: false,
+//             add: false,
+//             del: false,
+//             search: false,
+//             refresh: false
+//         }).setGridWidth($("#jqGridContainer").parent().width()).jqGrid('setFrozenColumns');
+//         ;
+//         $("#jqGridContainer").css("padding-left", "15px");
+//     }
+//
+//     // $(".ui-jqgrid .ui-jqgrid-titlebar").css({"padding": ".4rem", "font-size": "1.4rem"});
+//     // jQuery("#gbox_jqGridList").width(jQuery("#example1_wrapper").width() - 4);
+//     // jQuery(".ui-jqgrid-view").width(jQuery("#example1_wrapper").width() - 4);
+//     // jQuery(".ui-jqgrid-hdiv").width(jQuery("#example1_wrapper").width() - 4);
+//     // jQuery(".ui-jqgrid-pager").width(jQuery("#example1_wrapper").width() - 4);
+//
+//     // jQuery("#gbox_jqGridList").width(jQuery("#jqGridList").parent().width() - 34);
+//     // jQuery(".ui-jqgrid-view").width(jQuery("#jqGridList").parent().width() - 34);
+//     // jQuery(".ui-jqgrid-hdiv").width(jQuery("#jqGridList").parent().width() - 34);
+//     // jQuery(".ui-jqgrid-pager").width(jQuery("#jqGridList").parent().width() - 34);
+//     // jQuery(".jqgrow").height("26px");
+//     //
+//     jQuery(".ui-jqgrid-titlebar-close").hide();
+//     //
+//     //
+//     // jQuery("#jqGridContainer").css("margin", "2px");
+//     // jQuery("#jqGridContainer").css("padding-right", "16px");
+//     // jQuery("#jqGridContainer").css("padding-left", "6px");
+//
+//     // pagerInit();
+//
+// }
 
 // =========================================================================
 /**
  * 详细信息对话框的默认设置
  */
 function detailDlgInit() {
-    $(".modal-dialog").css("width", conf.detailDlgWidth);
+    $("#" + conf.detailDlgId + " .modal-dialog").css("width", conf.detailDlgWidth);
+
     // 保存按钮
-    if ($("#detailDlgSaveBtn").length > 0) {
-        $("#detailDlgSaveBtn").on("click", function () {
+    if ($("#" + conf.detailDlgSaveBtnId).length > 0) {
+        $("#" + conf.detailDlgSaveBtnId).on("click", function () {
             detailDlgSaveBtnAction();
         })
     }
     // 取消按钮
-    if ($("#detailDlgCloseBtn").length > 0) {
-        $("#detailDlgCloseBtn").on("click", function () {
+    if ($("#" + conf.detailDlgCloseBtnId).length > 0) {
+        $("#" + conf.detailDlgCloseBtnId).on("click", function () {
             detailDlgCancelBtnAction();
         })
+    }
+
+    var form = jQuery("#" + conf.formName);
+    for (var i = 0; i < dzGridConf.columns.length; i++) {
+        if ($("#" + dzGridConf.columns[i].fieldName).length > 0) {
+            continue;
+        } else {
+            form.append("<input type='hidden' id='" + dzGridConf.columns[i].fieldName + "'/>");
+        }
     }
 }
 
@@ -504,8 +542,8 @@ function afterSaveDetailDlg() {
 }
 
 function detailDlgCancelBtnAction() {
-    validator.resetForm();
-    jQuery("#" + conf.detailDlgId).dialog("close");
+    // validator.resetForm();
+    $("#" + conf.detailDlgId).dialog("close");
     afterCancelDetailDlg();
 }
 
@@ -521,7 +559,8 @@ function afterCancelDetailDlg() {
  * 防止重复提交表单的设置
  */
 function repeatedSubmitInit() {
-    jQuery("#" + conf.formName + " :input").on("change", function () {
+    $("#" + conf.formName + " :input").on("change", function () {
+        // console.log($(this).attr("id") + "changed");
         formHasChanged = true;
         stopSaveSubmit = false;
     });
@@ -536,18 +575,26 @@ function repeatedSubmitInit() {
  * 【新增】按钮响应函数
  */
 function onAddBtn() {
+    beforeOnAddBtn();
     clearInput();
     // var addDlg = jQuery("#" + conf.detailDlgId);
     // addDlg.dialog("option", "title", "新增" + conf.detailDlgTitle).dialog("open");
+    if (!conf.formEditable) {
+        $("#" + conf.formName).find(":input").removeAttr("disabled");
+    }
     stopSaveSubmit = false;
     $("#" + conf.detailDlgTitleContainer).html("新增" + conf.detailDlgTitle);
     $("#" + conf.detailDlgId).modal('show');
+    $("#" + conf.detailDlgSaveBtnId).show();
     afterOnAddBtn();
 }
 
 /**
- * 可覆盖该方法，打开【新增】对话框之后的动作
+ * 可覆盖该方法，打开【新增】对话框之前和之后的动作
  */
+function beforeOnAddBtn() {
+}
+
 function afterOnAddBtn() {
 }
 
@@ -561,7 +608,12 @@ function onModBtn() {
         // moDlg.dialog("option", "title", "修改" + conf.detailDlgTitle).dialog(
         //     "open");
         stopSaveSubmit = false;
-        $("#" + conf.detailDlgTitleContainer).html("修改" + conf.detailDlgTitle);
+        if (conf.formEditable) {
+            $("#" + conf.detailDlgTitleContainer).html("修改" + conf.detailDlgTitle);
+        } else {
+            $("#" + conf.detailDlgTitleContainer).html(conf.detailDlgTitle + "详情");
+            $("#" + conf.detailDlgSaveBtnId).hide();
+        }
         $("#" + conf.detailDlgId).modal('show');
     }
     afterOnModBtn();
@@ -610,6 +662,10 @@ function onExpBtn() {
     to_export();
 }
 
+function onQueryBtn() {
+    toQuery();
+}
+
 
 // TODO 功能应该在fill编辑框时调用？type参数无用？readOnlyFields直接在jqgrid的参数中设定？
 // 在clearInput清空所有输入框时，全部设为readonly=false，在fill编辑框时全部设为readonly=true
@@ -617,10 +673,17 @@ function setReadOnlyFiledsOnModify(type) {
     if (type == undefined || type == 'undefined') {
         type = true;
     }
-    if (jqGridConf.colModel.length > 0) {
-        for (var i = 0; i < jqGridConf.colModel.length; i++) {
-            if (jqGridConf.colModel[i].readonly) {
-                jQuery("#" + jqGridConf.colModel[i].name).attr("readonly", type);
+    // if (jqGridConf.colModel.length > 0) {
+    //     for (var i = 0; i < jqGridConf.colModel.length; i++) {
+    //         if (jqGridConf.colModel[i].readonly) {
+    //             jQuery("#" + jqGridConf.colModel[i].name).attr("readonly", type);
+    //         }
+    //     }
+    // }
+    if (dzGridConf.columns.length > 0) {
+        for (var i = 0; i < dzGridConf.columns.length; i++) {
+            if (dzGridConf.columns[i].readonly) {
+                $("#" + dzGridConf.columns[i].fieldName).attr("readonly", type)
             }
         }
     }
@@ -647,11 +710,18 @@ function to_add() {
             formMap["uploadfile"] = uploadFile;
             formMap["realfilename"] = realfilename;
         } else {
-            if (confirm("没有添加上传文件，确认要保存吗？")) {
-                eval(actionname + ".add(formMap,toQuery)");
-            } else {
-                return false;
-            }
+            DzConfirm.confirm("没有添加上传文件，确认要保存吗？").click(function (item) {
+                if (item) {
+                    eval(actionname + ".add(formMap,toQuery)");
+                } else {
+                    return false;
+                }
+            });
+            // if (confirm("没有添加上传文件，确认要保存吗？")) {
+            //     eval(actionname + ".add(formMap,toQuery)");
+            // } else {
+            //     return false;
+            // }
         }
     }
 
@@ -663,15 +733,17 @@ function to_save(validationRules) {
     if (stopSaveSubmit) {
         return false;
     }
-    // $("#userno").popover({title: '少的发代发多少发水电费', show: 'show'})
-    beforeToSave();
-    if (!formValidTag) {
-        dzToast('表单格式错误', 'error');
-        // alert("表单格式错误");
+    if (!beforeToSave()) {
         return false;
     }
+    // if (!formValidTag) {
+    //     dzToast('表单格式错误', 'error');
+    //     // alert("表单格式错误");
+    //     return false;
+    // }
     var formMap;
-    if (validator.form()) {
+    // if (validator.form()) {
+    if (formValidate()) {
         if (!formHasChanged) {
             // alert("未修改任何内容，无需保存！");
             dzToast("未修改任何内容，无需保存！", "warning");
@@ -680,6 +752,8 @@ function to_save(validationRules) {
         formHasChanged = false;
 
         formMap = getFormMap();
+
+        console.log(JSON.stringify(formMap));
 
         var rm = {
             reqJsonStr: JSON.stringify(formMap)
@@ -699,10 +773,12 @@ function to_save(validationRules) {
 function saveCallBack(item) {
     if (item.status == 1) {
         // alert("保存成功！");
-        dzToast("保存成功！", "success");
+        var msg = (item.msg || "");
+        dzToast(msg, "success");
         formHasChanged = false;
         // jQuery("#" + conf.detailDlgId).dialog("close");
         $("#" + conf.detailDlgId).modal("hide");
+        toQuery();
         afterSaveSuccess();
     } else {
         // alert("保存失败！");
@@ -712,23 +788,29 @@ function saveCallBack(item) {
 }
 
 function beforeToSave() {
+    return true;
 }
 
 function afterSaveSuccess() {
-    toQuery();
 }
 
 function to_export() {
-    console.log(JSON.stringify(getQueryList()));
+    // console.log(JSON.stringify(getQueryList()));
     var param = JSON.stringify({param: getQueryList()});
     var columns = [];
-    for (var i = 0; i < jqGridConf.colNames.length; i++) {
-        if (jqGridConf.colModel[i].hidden) {
+    // for (var i = 0; i < jqGridConf.colNames.length; i++) {
+    //     if (jqGridConf.colModel[i].hidden) {
+    //         continue;
+    //     }
+    //     columns.push({"name": jqGridConf.colNames[i], "id": jqGridConf.colModel[i].name})
+    // }
+    for (var i = 0; i < dzGridConf.columns.length; i++) {
+        if (dzGridConf.columns[i].hidden) {
             continue;
         }
-        columns.push({"name": jqGridConf.colNames[i], "id": jqGridConf.colModel[i].name})
+        columns.push({"name": dzGridConf.columns[i].name, "id": dzGridConf.columns[i].fieldName})
     }
-    console.log(param);
+    // console.log(param);
     if ($("#showForm").length <= 0) {
         $("body").append('<form id="showForm" name="showForm" method="post" action=""></form>');
     }
@@ -743,44 +825,85 @@ function to_export() {
 }
 
 function to_delete(deleteType, warnMsg) {
-    var row = jQuery("#jqGridList").jqGrid('getGridParam', 'selrow');
-    if (row == null || row == 'undefined') {
+    // var row = jQuery("#jqGridList").jqGrid('getGridParam', 'selrow');
+    var row = $("#" + conf.dzGridContainer).dzGrid("getCurrentSelectedRowId");
+    var rowDatas = $("#" + conf.dzGridContainer).dzGrid("getRowData", row);
+    if (rowDatas == undefined) {
         // alert('请先选择要删除的记录！');
         dzToast('请先选择要删除的记录！', "warning");
+        return false;
+    }
+    if (!beforeToDelete(rowDatas)) {
         return false;
     }
     if (warnMsg == undefined || warnMsg == null) {
         warnMsg = "确认要删除记录吗？";
     }
-    if (confirm(warnMsg)) {
-        var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
-        if (conf.deleteType != 'ById') {
-            var rm = {
-                reqJsonStr: JSON.stringify(rowDatas)
-            };
+    DzConfirm.confirm(warnMsg).click(function (item) {
+        if (item) {
+            if (conf.deleteType != 'ById') {
+                var rm = {
+                    reqJsonStr: JSON.stringify(rowDatas)
+                };
+            } else {
+                var id = rowDatas[conf.idFieldName];
+                var rm = {
+                    reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
+                };
+            }
+            ajax({
+                url: actionname + "_remove",
+                data: rm,
+                success: deleteCallBack,
+                error: deleteCallBack
+            });
         } else {
-            var id = rowDatas[conf.idFieldName];
-            var rm = {
-                reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
-            };
+            return false;
         }
-        ajax({
-            url: actionname + "_remove",
-            data: rm,
-            success: deleteCallBack,
-            error: deleteCallBack
-        });
-    }
+    });
+    // if (confirm(warnMsg)) {
+    //     // var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
+    //     // console.log(JSON.stringify(rowDatas));
+    //     if (conf.deleteType != 'ById') {
+    //         var rm = {
+    //             reqJsonStr: JSON.stringify(rowDatas)
+    //         };
+    //     } else {
+    //         var id = rowDatas[conf.idFieldName];
+    //         var rm = {
+    //             reqJsonStr: '{"' + conf.idFieldName + '":"' + id + '"}'
+    //         };
+    //     }
+    //     ajax({
+    //         url: actionname + "_remove",
+    //         data: rm,
+    //         success: deleteCallBack,
+    //         error: deleteCallBack
+    //     });
+    // }
+}
+
+function beforeToDelete(rowDatas) {
+    return true;
 }
 
 function deleteCallBack(item) {
+    // console.log(JSON.stringify(item));
+    // console.log(item.status == 1);
+    // console.log(item.msg == 'has_sub_item');
     if (item.status == 1) {
         // alert("删除成功！");
         // toastr.success("删除成功！");
         dzToast("删除成功！", "success");
     } else {
         // alert("删除失败！");
-        dzToast("删除失败！", "error");
+        if (item.msg == "has_sub_item") {
+            dzToast("删除项目包含子元素，未能删除", "error");
+        } else if (item.msg != "") {
+            dzToast(item.msg, "error");
+        } else {
+            dzToast("删除失败！", "error");
+        }
     }
     toQuery();
 }
@@ -803,7 +926,7 @@ function to_queryAll() {
         if (fields[i].type == 'text' || fields[i].type == 'textarea') {
             jQuery("#" + fields[i].value).val('');
         } else if (fields[i].type == 'select') {
-            setSelectValue(document.getElementById(fields[i].value), '');
+            setSelectValue(fields[i].value, '');
         } else if (fields[i].type == 'popup') {
             jQuery("#" + fields[i].name).val('');
             jQuery("#" + fields[i].value).val('');
@@ -845,7 +968,7 @@ function to_query() {
         reqJsonStr: JSON.stringify(pagerReq)
     };
     ajax({
-        url: actionname + "_query",
+        url: actionname + "_" + conf.queryMethodName,
         data: rm,
         success: callback,
         error: callback
@@ -863,16 +986,16 @@ function getQueryList() {
     // }
     // alert(JSON.stringify(queryList));
     if (conf.toolBarContainer != '') {
-        for (var i = 0; i < jqGridConf.colModel.length; i++) {
-            var fieldName = jqGridConf.colModel[i].name;
-            var fieldQueryType = jqGridConf.colModel[i].queryType;
-            var fieldValueType = jqGridConf.colModel[i].valueType;
+        for (var i = 0; i < dzGridConf.columns.length; i++) {
+            var fieldName = dzGridConf.columns[i].fieldName;
+            var fieldQueryType = dzGridConf.columns[i].queryType;
+            var fieldValueType = dzGridConf.columns[i].valueType;
             if (fieldQueryType && fieldQueryType == 'ignore') {
                 continue;
             }
             if (fieldQueryType && fieldQueryType == 'between') {
-                var sValue = jQuery("#query_" + fieldName + "_s").val();
-                var eValue = jQuery("#query_" + fieldName + "_e").val();
+                var sValue = $("#query_" + fieldName + "_s").val();
+                var eValue = $("#query_" + fieldName + "_e").val();
                 if (fieldValueType == 'percent' && sValue != '') {
                     sValue = sValue / 100;
                 }
@@ -904,7 +1027,7 @@ function getQueryList() {
                     });
                 }
             } else if (fieldQueryType && fieldQueryType == 'dateRange') {
-                var value = jQuery("#query_" + fieldName).val();
+                var value = $("#query_" + fieldName).val();
                 if (value == '') {
                     continue;
                 }
@@ -942,6 +1065,7 @@ function getQueryList() {
                 }
             } else {
                 var fieldValue = jQuery("#query_" + fieldName).val();
+                // console.log(fieldName+"==="+fieldValue);
                 if (fieldValueType == 'percent' && fieldValue && fieldValue != '') {
                     fieldValue = fieldValue / 100;
                 }
@@ -978,29 +1102,27 @@ function getQueryList() {
 // ------------------------ callback -------------------------
 // 列出所有记录
 function callback(item) {
-    // alert()
-    // alert(JSON.stringify(item))
+    // console.log(JSON.stringify(item));
     // 清空
-    jQuery("#jqGridList").jqGrid('clearGridData');
+    // jQuery("#jqGridList").jqGrid('clearGridData');
+    $("#" + conf.dzGridContainer).dzGrid("clearGrid");
     // 没有记录时
     if (item == null || item.status == '-1' || item.datas == null
         || item.datas.length == 0) {
         setNoRecord();
-        return;
+    } else {
+        // 有记录时
+        setRecordFields(item);
     }
-
-    // 有记录时
-    setRecordFields(item);
 
     // // 对上传文件的处理
     // setFileUpload();
 
     // 设置页脚
-    setPageFoot();
+    // setPageFoot();
 
     // 特殊处理的预留函数
     aftercallback(item);
-
 }
 
 function setNoRecord() {
@@ -1025,12 +1147,14 @@ function setNoRecord() {
 function setRecordFields(item) {
     if (item.datas != undefined && item.datas != null) {
         // alert(JSON.stringify(item))
+        $("#" + conf.dzGridContainer).dzGrid("fillGrid", item);
         pagerModel = item;
         // jQuery.extend(pagerModel, item);
+        // TODO
         var selectAll = true;
         for (var i = 0; i < item.datas.length; i++) {
             // alert(i+item[i].deptId+item[i].deptName+item[i].parentDeptId+item[i].storeFlag+item[i].deptDesc+item[i].homeArea);
-            jQuery("#jqGridList").jqGrid('addRowData', i + 1, item.datas[i]);
+            // jQuery("#jqGridList").jqGrid('addRowData', i + 1, item.datas[i]);
             var idValue = eval("item.datas[i]." + conf.idFieldName);
             if (selectedRowIds.indexOf("," + idValue + ",") >= 0) {
                 jQuery("#jqGridList").jqGrid('setSelection', i + 1);
@@ -1109,86 +1233,94 @@ function fileDownLoad(path, filename, realfilename) {
 // ------------------------ 文件上传下载 -------------------------
 
 // ------------------------ 分页 -------------------------
-// 设置页脚
-function setPageFoot() {
-    setPagerOptions();
-}
+// // 设置页脚
+// function setPageFoot() {
+//     setPagerOptions();
+// }
+//
+// function setPagerOptions(pager) {
+//     // 数据初始化
+//     var total = pagerModel.maxRowCount == undefined ? 0
+//         : pagerModel.maxRowCount;// 记录总数
+//     jQuery("#jqGridPager_right").html(
+//         '<div class="ui-paging-info" style="text-align:right" dir="ltr">'
+//         + (pagerModel.firstRow == undefined ? 0
+//         : pagerModel.firstRow) + ' - '
+//         + (pagerModel.maxRow == undefined ? 0 : pagerModel.maxRow)
+//         + '　共' + total + ' 条</div>');
+//     jQuery("#sp_1_jqGridPager").html(
+//         pagerModel.maxPageCount == undefined ? 0 : pagerModel.maxPageCount);
+//
+//     jQuery("#jqGridPager_center input[type='text']")
+//         .val(pagerModel.currentPage);
+//
+//     clearPagerBtn();
+//
+//     if (pagerModel.currentPage == undefined || pagerModel.currentPage == 1) {
+//         jQuery("#first_jqGridPager").addClass("ui-state-disabled");
+//         jQuery("#prev_jqGridPager").addClass("ui-state-disabled");
+//
+//         jQuery("#next_jqGridPager").on("click", next);
+//         jQuery("#last_jqGridPager").on("click", last);
+//     } else if (pagerModel.currentPage == pagerModel.maxPageCount) {
+//         jQuery("#next_jqGridPager").addClass("ui-state-disabled");
+//         jQuery("#last_jqGridPager").addClass("ui-state-disabled");
+//
+//         jQuery("#first_jqGridPager").on("click", first);
+//         jQuery("#prev_jqGridPager").on("click", prev);
+//     } else {
+//         jQuery("#first_jqGridPager").on("click", first);
+//         jQuery("#prev_jqGridPager").on("click", prev);
+//         jQuery("#next_jqGridPager").on("click", next);
+//         jQuery("#last_jqGridPager").on("click", last);
+//     }
+// }
 
-function setPagerOptions(pager) {
-    // 数据初始化
-    var total = pagerModel.maxRowCount == undefined ? 0
-        : pagerModel.maxRowCount;// 记录总数
-    jQuery("#jqGridPager_right").html(
-        '<div class="ui-paging-info" style="text-align:right" dir="ltr">'
-        + (pagerModel.firstRow == undefined ? 0
-        : pagerModel.firstRow) + ' - '
-        + (pagerModel.maxRow == undefined ? 0 : pagerModel.maxRow)
-        + '　共' + total + ' 条</div>');
-    jQuery("#sp_1_jqGridPager").html(
-        pagerModel.maxPageCount == undefined ? 0 : pagerModel.maxPageCount);
-
-    jQuery("#jqGridPager_center input[type='text']")
-        .val(pagerModel.currentPage);
-
-    clearPagerBtn();
-
-    if (pagerModel.currentPage == undefined || pagerModel.currentPage == 1) {
-        jQuery("#first_jqGridPager").addClass("ui-state-disabled");
-        jQuery("#prev_jqGridPager").addClass("ui-state-disabled");
-
-        jQuery("#next_jqGridPager").on("click", next);
-        jQuery("#last_jqGridPager").on("click", last);
-    } else if (pagerModel.currentPage == pagerModel.maxPageCount) {
-        jQuery("#next_jqGridPager").addClass("ui-state-disabled");
-        jQuery("#last_jqGridPager").addClass("ui-state-disabled");
-
-        jQuery("#first_jqGridPager").on("click", first);
-        jQuery("#prev_jqGridPager").on("click", prev);
-    } else {
-        jQuery("#first_jqGridPager").on("click", first);
-        jQuery("#prev_jqGridPager").on("click", prev);
-        jQuery("#next_jqGridPager").on("click", next);
-        jQuery("#last_jqGridPager").on("click", last);
-    }
-}
-
-function clearPagerBtn() {
-    jQuery("#first_jqGridPager").removeClass("ui-state-disabled");
-    jQuery("#prev_jqGridPager").removeClass("ui-state-disabled");
-    jQuery("#next_jqGridPager").removeClass("ui-state-disabled");
-    jQuery("#last_jqGridPager").removeClass("ui-state-disabled");
-
-    jQuery("#first_jqGridPager").unbind("click");
-    jQuery("#prev_jqGridPager").unbind("click");
-    jQuery("#next_jqGridPager").unbind("click");
-    jQuery("#last_jqGridPager").unbind("click");
-}
-
-function first() {
-    var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
-    pagerReq.pageNum = 1;
-    to_query();
-}
-
-function last() {
-    var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
-    pagerReq.pageNum = pagerModel.maxPageCount;
-    to_query();
-}
-
-function prev() {
-    var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
-    pagerReq.pageNum = pagerModel.currentPage - 1;
-    to_query();
-}
-
-function next() {
-    var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
-    pagerReq.pageNum = pagerModel.currentPage + 1;
-    to_query();
-}
+// function clearPagerBtn() {
+//     jQuery("#first_jqGridPager").removeClass("ui-state-disabled");
+//     jQuery("#prev_jqGridPager").removeClass("ui-state-disabled");
+//     jQuery("#next_jqGridPager").removeClass("ui-state-disabled");
+//     jQuery("#last_jqGridPager").removeClass("ui-state-disabled");
+//
+//     jQuery("#first_jqGridPager").unbind("click");
+//     jQuery("#prev_jqGridPager").unbind("click");
+//     jQuery("#next_jqGridPager").unbind("click");
+//     jQuery("#last_jqGridPager").unbind("click");
+// }
+//
+// function first() {
+//     var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
+//     pagerReq.pageNum = 1;
+//     to_query();
+// }
+//
+// function last() {
+//     var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
+//     pagerReq.pageNum = pagerModel.maxPageCount;
+//     to_query();
+// }
+//
+// function prev() {
+//     var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
+//     pagerReq.pageNum = pagerModel.currentPage - 1;
+//     to_query();
+// }
+//
+// function next() {
+//     var rowsPerPage = jQuery("#jqGridPager_center .ui-pg-selbox").val();
+//     pagerReq.pageNum = pagerModel.currentPage + 1;
+//     to_query();
+// }
 
 // ------------------------ 分页 -------------------------
+function goPageFun(pageNum, rowsPerPage) {
+    // console.log("goPageFun" + pageNum);
+    pagerReq.pageNum = pageNum;
+    if (rowsPerPage) {
+        pagerReq.rowsPerPage = rowsPerPage;
+    }
+    to_query();
+}
 
 // ------------------------ 公用方法 -------------------------
 // 全选方法
@@ -1200,9 +1332,10 @@ function SelectAll(obj) {
 }
 
 // 设置select的值
-function setSelectValue(obj, value) {
+function setSelectValue(objId, value) {
+    var obj = document.getElementById(objId);
     for (var i = 0; i < obj.options.length; i++) {
-        svalue = obj.options[i].value;
+        var svalue = obj.options[i].value;
         if (value == svalue) {
             obj.selectedIndex = i;
             // break;
@@ -1237,40 +1370,40 @@ function dateFormat(value) {
 // ------------------------ 公用方法 -------------------------
 
 // ------------------------ 初始化 -------------------------
-function pagerInit() {
-    if (jQuery("#jqGridPager").length > 0) {
-
-        // jQuery("#first_jqGridPager").unbind("click");
-        // jQuery("#prev_jqGridPager").unbind("click");
-        // jQuery("#next_jqGridPager").unbind("click");
-        // jQuery("#last_jqGridPager").unbind("click");
-        //
-        // jQuery("#first_jqGridPager").on("click", first);
-        // jQuery("#prev_jqGridPager").on("click", prev);
-        // jQuery("#next_jqGridPager").on("click", next);
-        // jQuery("#last_jqGridPager").on("click", last);
-
-        // jQuery("#jqGridPager_center input[type='text']").on("change",
-        $(".ui-pg-input").on("change", function () {
-            // to_query(jQuery(this).val(), jQuery(
-            //     "#jqGridPager_center .ui-pg-selbox").val(),
-            //     getQuerySQL(conf.toolBarContainer));
-            var pageNum = $(this).val();
-            if (!isNaN(pageNum)) {
-                if (pageNum < 1 || pageNum > pagerModel.maxPageCount) {
-                    dzToast('页码超出范围', 'warning');
-                    first();
-                } else {
-                    pagerReq.pageNum = $(this).val();
-                    toQuery();
-                }
-            } else {
-                dzToast('页面只能输入数字', 'warning');
-            }
-        });
-    }
-    jQuery(".ui-pg-selbox").remove();
-}
+// function pagerInit() {
+//     if (jQuery("#jqGridPager").length > 0) {
+//
+//         // jQuery("#first_jqGridPager").unbind("click");
+//         // jQuery("#prev_jqGridPager").unbind("click");
+//         // jQuery("#next_jqGridPager").unbind("click");
+//         // jQuery("#last_jqGridPager").unbind("click");
+//         //
+//         // jQuery("#first_jqGridPager").on("click", first);
+//         // jQuery("#prev_jqGridPager").on("click", prev);
+//         // jQuery("#next_jqGridPager").on("click", next);
+//         // jQuery("#last_jqGridPager").on("click", last);
+//
+//         // jQuery("#jqGridPager_center input[type='text']").on("change",
+//         $(".ui-pg-input").on("change", function () {
+//             // to_query(jQuery(this).val(), jQuery(
+//             //     "#jqGridPager_center .ui-pg-selbox").val(),
+//             //     getQuerySQL(conf.toolBarContainer));
+//             var pageNum = $(this).val();
+//             if (!isNaN(pageNum)) {
+//                 if (pageNum < 1 || pageNum > pagerModel.maxPageCount) {
+//                     dzToast('页码超出范围', 'warning');
+//                     first();
+//                 } else {
+//                     pagerReq.pageNum = $(this).val();
+//                     toQuery();
+//                 }
+//             } else {
+//                 dzToast('页面只能输入数字', 'warning');
+//             }
+//         });
+//     }
+//     jQuery(".ui-pg-selbox").remove();
+// }
 
 function cssInit() {
 
@@ -1343,14 +1476,50 @@ function cssInit() {
 // ------------------------ 初始化 -------------------------
 
 // -------------------------- 数据验证 ----------------------
-function fieldValidate() {
-    jQuery(":input").change(function () {
-        jQuery(this).val(CtoH(jQuery(this).val()));
-    })
+function initValid() {
+    $("#" + conf.formName + " :input").on("change", function () {
+        fieldValidate($(this).attr('id'));
+        // console.log($(this).attr('id')+"valid");
+    });
+}
+
+function fieldValidate(id) {
+    if ($("#" + id).attr("type") != 'file') {
+        $("#" + id).val(CtoH($("#" + id).val()));
+    }
+    if ($("#" + id).length > 0 && $("#" + id)[0].hasAttribute('required')) {
+        // console.log(id + 'required');
+        if ($("#" + id).val() == '') {
+            $("#" + id).parent().addClass("has-error");
+            return false;
+        } else {
+            $("#" + id).parent().removeClass("has-error");
+            return true;
+        }
+    }
+    return true;
+}
+
+function formValidate() {
+    // var ipts=$("#"+conf.formName).find(" :input");
+    var isValid = true;
+    $("#" + conf.formName).find(":input").each(function () {
+        if (!fieldValidate($(this).attr("id"))) {
+            isValid = false;
+        }
+    });
+    // console.log("isValid=" + isValid);
+    return isValid;
 }
 
 // 全角转半角
 function CtoH(str) {
+    if (typeof str != 'string') {
+        return str;
+    }
+    if (str == null) {
+        return "";
+    }
     var result = "";
     for (var i = 0; i < str.length; i++) {
         if (str.charCodeAt(i) == 12288) {
@@ -1397,47 +1566,73 @@ function parseEditOptionValue(item) {
     return str;
 }
 
-function getParameter(param) {
-    var query = window.location.search;
-    if (query = undefined || query == '') {
-        return '';
+function getParameter(paramName) {
+    var paramStr = window.location.search;
+    paramStr = paramStr.replace("?", "");
+    var paramStrArr = paramStr.split("&");
+    var params = [];
+    for (var i = 0; i < paramStrArr.length; i++) {
+        var o = new Object();
+        o[paramStrArr[i].split("=")[0]] = paramStrArr[i].split("=")[1]
+        params.push({
+            name: paramStrArr[i].split("=")[0],
+            value: paramStrArr[i].split("=")[1]
+        });
     }
-    if (param == undefined || param == null) {
-        return query.substring(1, query.length);
-    } else {
-        var iLen = param.length;
-        var iStart = query.indexOf(param);
-        if (iStart == -1) {
-            return "";
+    if (paramName != undefined) {
+        for (var i = 0; i < params.length; i++) {
+            if (params[i].name == paramName) {
+                return params[i].value;
+            }
         }
-        iStart += iLen + 1;
-        var iEnd = query.indexOf("&", iStart);
-        if (iEnd == -1) {
-            // 返回所有
-            return query.substring(iStart);
-        }
-        return query.substring(iStart, iEnd);
     }
+    return params;
+    // console.log(query.indexOf("="));
+    // if (query = undefined || query == '') {
+    //     return '';
+    // }
+    // if (param == undefined || param == null) {
+    //     return query.substring(1, query.length);
+    // } else {
+    //     var iLen = param.length;
+    //     var iStart = query.indexOf(param);
+    //     if (iStart == -1) {
+    //         return "";
+    //     }
+    //     iStart += iLen + 1;
+    //     var iEnd = query.indexOf("&", iStart);
+    //     if (iEnd == -1) {
+    //         // 返回所有
+    //         return query.substring(iStart);
+    //     }
+    //     return query.substring(iStart, iEnd);
+    // }
 }
+
 
 /**
  * 绑定查询区域中输入域的onchange事件
  */
 function queryInit() {
     jQuery("#" + conf.toolBarContainer + " :input").on("change", function () {
+        console.log('query_changed');
         toQuery();
     })
 }
 
 // 清空所有Input中的内容
 function clearInput(settings) {
-    var conf = {
-        formName: "showForm",
-        notClearFields: ""
-    };
-    jQuery.extend(conf, settings);
+    // console.log('clearInput');
+    // validator.resetForm();
+    // var conf = {
+    //     formName: "showForm",
+    //     notClearFields: ""
+    // };
+    // jQuery.extend(conf, settings);
+    $("#" + conf.formName).find(".has-error").removeClass("has-error");
     var fields = conf.notClearFields.split(",");
-    jQuery("#" + conf.formName + " :input").each(function () {
+    $("#" + conf.formName + " :input").each(function () {
+        // console.log($(this).attr("id"));
         var isClear = true;
         for (var i = 0; i < fields.length; i++) {
             if (jQuery(this).attr("id") === fields[i]) {
@@ -1447,6 +1642,8 @@ function clearInput(settings) {
         }
         if (isClear) {
             if (jQuery(this).is("input:radio")) {
+            } else if (jQuery(this).hasClass("dzSwitch")) {
+                jQuery(this).dzSwitch("setDefaultVal");
             } else {
                 jQuery(this).val("");
                 // if (jQuery(this).is("select")) {
@@ -1473,82 +1670,87 @@ function clearInput(settings) {
 }
 
 // 根据jqGrid中选中的行，填充编辑对话框，已测试对文本框和select有效
-function filledInputBySelectedRow(jqGridList) {
-    if (jqGridList == undefined || jqGridList == null) {
-        jqGridList = "jqGridList";
+function filledInputBySelectedRow() {
+    // var row = jQuery("#" + jqGridList).jqGrid('getGridParam', 'selrow');
+    var row = $("#" + conf.dzGridContainer).dzGrid("getCurrentSelectedRowId");
+    var rowDatas = $("#" + conf.dzGridContainer).dzGrid("getRowData", row);
+    if (rowDatas == undefined) {
+        dzToast("请选择要编辑的记录！", "warning");
+        return false;
     }
-    var row = jQuery("#" + jqGridList).jqGrid('getGridParam', 'selrow');
-    if (row == null || row == 'undefined') {
-        row = jqGrid_selRowId;
-        if (row == undefined || row == null) {
-            dzToast("请选择要编辑的记录！", "warning");
-            return false;
-        }
-    }
-    var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
+    // var rowDatas = jQuery("#jqGridList").jqGrid('getRowData', row);
     filledInputByItem(rowDatas);
     return true;
 }
 
 function filledInputByItem(item) {
+    // console.log("filledInputByItem" + JSON.stringify(item));
     before_filledInput(item);
     if (item != null) {
-        for (var i = 0; i < jqGridConf.colModel.length; i++) {
-            if (jqGridConf.colModel[i].edittype == 'ignore') {
+        for (var i = 0; i < dzGridConf.columns.length; i++) {
+            if (dzGridConf.columns[i].edittype == 'ignore') {
                 continue;
-            } else if (jqGridConf.colModel[i].edittype != undefined
-                && jqGridConf.colModel[i].edittype == 'select') {
+            } else if (dzGridConf.columns[i].edittype != undefined
+                && dzGridConf.columns[i].edittype == 'select') {
                 // eval(jqGridConf.colModel[i].cascadefun);
-                var elem = jQuery("#" + jqGridConf.colModel[i].name);
+                var elem = jQuery("#" + dzGridConf.columns[i].fieldName);
                 if (elem.length > 0) {
                     // elem.combobox("destroy");
-                    setSelectValue(document
-                            .getElementById(jqGridConf.colModel[i].name),
-                        item[jqGridConf.colModel[i].name]);
+                    setSelectValue(dzGridConf.columns[i].fieldName, item[dzGridConf.columns[i].fieldName]);
                     // elem.comboboxUtil();
                     // elem.refreshCascade();
                 }
-            }else if(jqGridConf.colModel[i].edittype != undefined
-                && jqGridConf.colModel[i].edittype == 'select2'){
-                $("#" + jqGridConf.colModel[i].name).val(item[jqGridConf.colModel[i].name]).select2();
-            } else if (jqGridConf.colModel[i].edittype != undefined
-                && jqGridConf.colModel[i].edittype == 'check') {
-                var elem = jQuery("#" + jqGridConf.colModel[i].name);
-                item[jqGridConf.colModel[i].name] == '1' ? elem.prop("checked",
+            } else if (dzGridConf.columns[i].edittype != undefined
+                && dzGridConf.columns[i].edittype == 'select2') {
+                $("#" + dzGridConf.columns[i].fieldName).val(item[dzGridConf.columns[i].fieldName]).select2();
+            } else if (dzGridConf.columns[i].edittype != undefined
+                && dzGridConf.columns[i].edittype == 'check') {
+                var elem = jQuery("#" + dzGridConf.columns[i].fieldName);
+                item[dzGridConf.columns[i].fieldName] == '1' ? elem.prop("checked",
                     true) : elem.removeAttr("checked");
                 //    如果是多选，这里不添加内容
-            } else if (jqGridConf.colModel[i].edittype != undefined
-                && jqGridConf.colModel[i].edittype == 'multi') {
+            } else if (dzGridConf.columns[i].edittype != undefined
+                && dzGridConf.columns[i].edittype == 'multi') {
+            } else if (dzGridConf.columns[i].edittype != undefined
+                && dzGridConf.columns[i].edittype == 'dzSwitch') {
+                var elem = jQuery("#" + dzGridConf.columns[i].fieldName);
+                var value = item[dzGridConf.columns[i].fieldName];
+                elem.dzSwitch('setVal', value);
             } else {
-                var elem = jQuery("#" + jqGridConf.colModel[i].name);
+                var elem = jQuery("#" + dzGridConf.columns[i].fieldName);
+                var value = item[dzGridConf.columns[i].fieldName];
+                value = (value == undefined || value == 'undefined' ? "" : value);
                 if (elem.length > 0) {
                     if (elem.is("select")) {
                         // elem.combobox("destroy");
-                        if (!setSelectValue(document
-                                    .getElementById(jqGridConf.colModel[i].name),
-                                item[jqGridConf.colModel[i].name])) {
+                        if (!setSelectValue(dzGridConf.columns[i].fieldName, value)) {
                             elem
                                 .append("<option value='"
-                                    + item[jqGridConf.colModel[i].name]
+                                    + value
                                     + "'>"
-                                    + item[jqGridConf.colModel[i].selectDisplayFieldName]
+                                    + item[dzGridConf.columns[i].selectDisplayFieldName]
                                     + "</option>");
-                            elem.val(item[jqGridConf.colModel[i].name]);
+                            elem.val(value);
                         }
                         // elem.comboboxUtil();
+                    } else if (elem.is("img")) {
+                        elem.attr("src", value);
                     } else {
                         // elem.popUpTree("setValue", jqGridConf.colModel, item);
-                        elem.val(item[jqGridConf.colModel[i].name]);
+                        elem.val(value);
                     }
                     // elem.refreshCascade();
                 } else {
                     var form = jQuery("#" + conf.formName);
                     form.append("<input type='hidden' id='"
-                        + jqGridConf.colModel[i].name + "' value='"
-                        + item[jqGridConf.colModel[i].name] + "'/>");
+                        + dzGridConf.columns[i].fieldName + "' value='"
+                        + value + "'/>");
                 }
             }
         }
+    }
+    if (!conf.formEditable) {
+        $("#" + conf.formName).find(":input").attr("disabled", "disabled");
     }
     setReadOnlyFiledsOnModify(true);
     after_filledInput(item);
@@ -1587,22 +1789,24 @@ function loadingDlgClose() {
 
 function getFormMap() {
     var o = new Object();
-    for (var i = 0; i < jqGridConf.colModel.length; i++) {
-        if (jqGridConf.colModel[i].edittype == 'ignore' || jqGridConf.colModel[i].savetype == 'ignore') {
+    for (var i = 0; i < dzGridConf.columns.length; i++) {
+        if (dzGridConf.columns[i].edittype == 'ignore' || dzGridConf.columns[i].savetype == 'ignore') {
             continue;
         }
-        var obj = jQuery("#" + jqGridConf.colModel[i].name);
+        var obj = $("#" + dzGridConf.columns[i].fieldName);
+        console.log(dzGridConf.columns[i].fieldName + obj.length);
         if (obj.length > 0) {
-            var value = jQuery("#" + jqGridConf.colModel[i].name).val();
-            if (jqGridConf.colModel[i].inputType == 'checkbox') {
-                if (jQuery("#" + jqGridConf.colModel[i].name).is(":checked")) {
+            var value = $("#" + dzGridConf.columns[i].fieldName).val();
+            console.log(value);
+            if (dzGridConf.columns[i].inputType == 'checkbox') {
+                if ($("#" + dzGridConf.columns[i].fieldName).is(":checked")) {
                     value = '1';
                 } else {
                     value = '0';
                 }
 
-            } else if (jqGridConf.colModel[i].edittype == 'multi') {
-                var optionArr = $("#" + jqGridConf.colModel[i].name).select2('data');
+            } else if (dzGridConf.columns[i].edittype == 'multi') {
+                var optionArr = $("#" + dzGridConf.columns[i].fieldName).select2('data');
                 var ids = "";
                 var values = "";
                 for (var j = 0; j < optionArr.length; j++) {
@@ -1615,17 +1819,17 @@ function getFormMap() {
                 if (values.length > 0) {
                     values = values.substr(0, values.length - 1);
                 }
-                eval("o." + jqGridConf.colModel[i].idFieldName + "='" + ids + "'");
-                eval("o." + jqGridConf.colModel[i].name + "='" + values + "'");
+                eval("o." + dzGridConf.columns[i].idFieldName + "='" + ids + "'");
+                eval("o." + dzGridConf.columns[i].fieldName + "='" + values + "'");
                 continue;
             }
             if (value == undefined || value == null || value == '') {
-                if (jqGridConf.colModel[i].defaultValue != undefined) {
-                    value = jqGridConf.colModel[i].defaultValue;
-                    // alert(jqGridConf.colModel[i].name + ":" + value);
+                if (dzGridConf.columns[i].defaultValue != undefined) {
+                    value = dzGridConf.columns[i].defaultValue;
+                    // alert(dzGridConf.columns[i].fieldName + ":" + value);
                 }
             }
-            eval("o." + jqGridConf.colModel[i].name + "='"
+            eval("o." + dzGridConf.columns[i].fieldName + "='"
                 + value + "'");
         }
     }
@@ -1661,22 +1865,31 @@ function setQueryListToPagerReq(queryListSet) {
 
 //TODO 待修改
 function bindToCheckExist() {
-    jQuery("#" + conf.idFieldName).on('change', function () {
-        findExist();
-    });
+    for (var i = 0; i < conf.checkExist.length; i++) {
+        $("#" + conf.checkExist[i]).on('change', function () {
+            findExist($(this).attr("id"));
+        });
+    }
 }
 
-function findExist() {
+function findExist(fieldId) {
+    // console.log(fieldId);
+    // console.log($("#" + fieldId).val());
+    // var formMap = getFormMap();
+    var formMap = {};
+    formMap[fieldId] = $("#" + fieldId).val();
+    var rm = {
+        reqJsonStr: JSON.stringify(formMap)
+    };
     ajax({
         url: actionname + "_findById",
-        data: {
-            reqJsonStr: '{"' + conf.idFieldName + '":"' + jQuery("#" + conf.idFieldName).val() + '"}'
-        },
+        data: rm,
         async: false,
         success: function (item) {
             if (item.status == 1) {
                 // alert('记录已存在');
-                dzToast('记录已存在', 'warning');
+                DzConfirm.alert('记录已存在');
+
                 filledInputByItem(item.datas[0]);
                 // stopSaveSubmit = true;
                 formHasChanged = false;
@@ -1702,4 +1915,75 @@ function formatterPercent(cellvalue, n) {
 
 function unformatPercent(cellvalue) {
     return cellvalue == undefined || cellvalue == '' ? "" : cellvalue.replace("%", "") / 100;
+}
+
+function formatterUrl(cellvalue) {
+    if (cellvalue != undefined && cellvalue != '') {
+        return "<a href='../" + cellvalue.replace("\\", "\/") + "' target='_blank'><i class='fa fa-fw fa-file-text-o'></i></a>";
+    } else {
+        return "";
+    }
+}
+
+function unformatUrl(cellvalue) {
+    if (cellvalue != "") {
+        return $(cellvalue).attr("href").replace("../");
+    } else {
+        return "";
+    }
+}
+
+function setSelectOptions(objId, text, item, valueFieldName, textFieldName) {
+    // console.log(JSON.stringify(item));
+    if (valueFieldName == undefined) {
+        valueFieldName = 'value';
+    }
+    if (textFieldName == undefined) {
+        textFieldName = 'name';
+    }
+    var sel1 = $("#query_" + objId);
+    var sel2 = $("#" + objId);
+    var datas = (item.datas == undefined ? item : item.datas);
+    // console.log(JSON.stringify(datas));
+    if (datas.length > 0) {
+        if (sel1.length > 0 && !sel1.hasClass("select2")) {
+            sel1.html("<option value=''>--全部" + text + "--</option>");
+        }
+        if (sel2.length > 0 && !sel2.hasClass("select2")) {
+            sel2.html("<option value=''>--请选择" + text + "--</option>");
+        }
+        for (var i = 0; i < datas.length; i++) {
+            if (sel1.length > 0) {
+                sel1.append("<option value='" + datas[i][valueFieldName] + "'>"
+                    + datas[i][textFieldName] + "</option");
+            }
+            if (sel2.length > 0) {
+                sel2.append("<option value='" + datas[i][valueFieldName] + "' selected>"
+                    + datas[i][textFieldName] + "</option");
+            }
+        }
+        if (sel1.length > 0) {
+            sel1.val('');
+        }
+        if (sel2.length > 0) {
+            sel2.val('');
+        }
+    } else {
+        if (sel1.length > 0) {
+            sel1.html("<option disabled='disabled'>--暂无" + text + "--</option>");
+        }
+        if (sel2.length > 0) {
+            sel2.html("<option disabled='disabled'>--暂无" + text + "--</option>");
+        }
+    }
+    if (sel1.hasClass("select2")) {
+        sel1.select2({
+            multiple: sel1.attr("multiple") == "multiple"
+        });
+    }
+    if (sel2.hasClass("select2")) {
+        sel2.select2({
+            multiple: sel2.attr("multiple") == "multiple"
+        });
+    }
 }

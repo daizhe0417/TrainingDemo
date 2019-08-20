@@ -55,6 +55,18 @@
     border-color: #5293c4
 }
 
+/*add by venice*/
+/*add class "current"*/
+.wizard-steps li.current:before, .wizard-steps li.current .step {
+    border-color: #f39c12;
+}
+
+.wizard-steps li.current .title {
+    color: #f39c12
+}
+
+/*add by venice*/
+
 .wizard-steps li.complete .step {
     cursor: default;
     color: #FFF;
@@ -108,6 +120,7 @@
 .wizard-steps li.complete .title, .wizard-steps li.active .title {
     color: #2b3d53
 }
+
 
 .step-content .step-pane {
     display: none;

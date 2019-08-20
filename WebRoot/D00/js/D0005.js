@@ -102,8 +102,8 @@ function getAllMenusCallBack(item) {
 
 function saveCallBack(item) {
     if (item.status == 1) {
-        alert('保存成功！');
+        DzConfirm.alert('保存成功！');
     } else {
-        alert('保存失败！');
+        DzConfirm.alert('保存失败！');
     }
 }

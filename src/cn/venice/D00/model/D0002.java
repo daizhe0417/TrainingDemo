@@ -1,49 +1,39 @@
 package cn.venice.D00.model;
 
-/**
- * D0002 entity. @author MyEclipse Persistence Tools
- */
+import java.util.Objects;
 
-public class D0002 implements java.io.Serializable {
+public class D0002 {
+    private Integer roleId;
+    private String roleName;
 
-	// Fields
+    public Integer getRoleId() {
+        return roleId;
+    }
 
-	private String roleno;
-	private String rolename;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
 
-	// Constructors
+    public String getRoleName() {
+        return roleName;
+    }
 
-	/** default constructor */
-	public D0002() {
-	}
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
-	/** minimal constructor */
-	public D0002(String roleno) {
-		this.roleno = roleno;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        D0002 d0002 = (D0002) o;
+        return Objects.equals(roleId, d0002.roleId) &&
+                Objects.equals(roleName, d0002.roleName);
+    }
 
-	/** full constructor */
-	public D0002(String roleno, String rolename) {
-		this.roleno = roleno;
-		this.rolename = rolename;
-	}
+    @Override
+    public int hashCode() {
 
-	// Property accessors
-
-	public String getRoleno() {
-		return this.roleno;
-	}
-
-	public void setRoleno(String roleno) {
-		this.roleno = roleno;
-	}
-
-	public String getRolename() {
-		return this.rolename;
-	}
-
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
-	}
-
+        return Objects.hash(roleId, roleName);
+    }
 }

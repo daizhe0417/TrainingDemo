@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>据兴科技</title>
+    <title>教学项目</title>
     <link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css">
@@ -88,9 +88,9 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="userno" type="text" class="form-control" placeholder="用户名"/>
+                                <input id="userNo" type="text" class="form-control" placeholder="用户名"/>
                             </div>
-                            <span id="usernoErrMsg" class="help-block">&nbsp;</span>
+                            <span id="userNoErrMsg" class="help-block">&nbsp;</span>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
@@ -112,7 +112,7 @@
         </div>
     </div>
 </div>
-<script src="<%=request.getContextPath()%>/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/util/jquery/jquery-2.2.3.min.js"></script>
 <script src="<%=request.getContextPath()%>/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function () {
@@ -123,8 +123,8 @@
     });
 
     function clearErrMsg() {
-        jQuery("#userno").parent().parent().removeClass("has-error");
-        jQuery("#usernoErrMsg").html("&nbsp;")
+        jQuery("#userNo").parent().parent().removeClass("has-error");
+        jQuery("#userNoErrMsg").html("&nbsp;")
         jQuery("#passwd").parent().parent().removeClass("has-error");
         jQuery("#passwdErrMsg").html("&nbsp;")
         jQuery("#loginErrMsg").parent().removeClass("has-error");
@@ -134,7 +134,7 @@
     function toSubmit() {
         if (validFields()) {
             var req = {
-                userno: jQuery("#userno").val(),
+                userNo: jQuery("#userNo").val(),
                 passwd: jQuery("#passwd").val()
             };
             var rm = {
@@ -150,7 +150,7 @@
                 success: function (item) {
                     var obj = jQuery.parseJSON(item);
                     if (obj.status == 1) {
-                        if (obj.datas[0].uType == '0') {
+                        if (obj.datas[0].userType == '0') {
                             top.location = "index.jsp";
                         } else {
                             top.location = "product.jsp";
@@ -174,10 +174,10 @@
     function validFields() {
         clearErrMsg();
 
-        if (jQuery("#userno").val() == undefined
-            || jQuery("#userno").val() == "") {
-            jQuery("#userno").parent().parent().addClass("has-error");
-            jQuery("#usernoErrMsg").html("用户名不能为空！");
+        if (jQuery("#userNo").val() == undefined
+            || jQuery("#userNo").val() == "") {
+            jQuery("#userNo").parent().parent().addClass("has-error");
+            jQuery("#userNoErrMsg").html("用户名不能为空！");
             return false;
         }
         if (jQuery("#passwd").val() == undefined

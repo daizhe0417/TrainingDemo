@@ -36,8 +36,10 @@
         me.fileinput(conf).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
             console.log(data.response.datas[0]);
             if (data.response.status == 1) {
-                $("#" + conf.inputFiled).val(data.response.datas[0]);
-                $("#" + conf.inputFiled).trigger("change");
+                if ($("#" + conf.inputFiled).length > 0) {
+                    $("#" + conf.inputFiled).val(data.response.datas[0]);
+                    $("#" + conf.inputFiled).trigger("change");
+                }
                 dzToast(data.response.datas[0].replace("\\", "\/"), 'success');
                 afterUploadFile(data);
             } else {

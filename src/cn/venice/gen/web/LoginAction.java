@@ -25,16 +25,17 @@ public class LoginAction extends GenericAction {
         try {
             D0003 d = (D0003) this.fromJSON(reqJsonStr, D0003.class);
 
-            if (d.getUserno() != null && !d.getUserno().equals("")
+            if (d.getUserNo() != null && !d.getUserNo().equals("")
                     && d.getPasswd() != null && !d.getPasswd().equals("")) {
-                if (d.getUserno().equals("admin")
+                if (d.getUserNo().equals("admin")
                         && d.getPasswd().equals("123")) {
                     UserInfoModel v = new UserInfoModel();
-                    v.setUserno("admin");
-                    v.setUsername("超级管理员");
-                    v.setRoleno("admin");
-                    v.setBmdm("");
-                    v.setuType("0");
+                    v.setUserNo("admin");
+                    v.setUserName("超级管理员");
+                    v.setRoleNo("admin");
+                    v.setRoleName("超级管理员");
+                    v.setBmmc("");
+                    v.setUserType("0");
                     this.getSession().setAttribute(
                             ConstantClass.LOGIN_USER_SESSION_ID, v);
                     return this.returnDatas(v);
@@ -42,9 +43,9 @@ public class LoginAction extends GenericAction {
                     try {
                         List tmp = mgr.find(
                                 "from V0003 where userno=? and passwd=?",
-                                d.getUserno(),
+                                d.getUserNo(),
                                 MD5Util.convertMD5(MD5Util.string2MD5(d
-                                        .getPasswd() + d.getUserno())));
+                                        .getPasswd() + d.getUserNo())));
                         if (tmp == null || tmp.isEmpty()) {
 //							rm.setStatus(ResModel.RETURN_STATUS_OK);
 //							rm.setMsg(GenericConstant.LOGIN_PASSWD_WRONG);
@@ -58,13 +59,13 @@ public class LoginAction extends GenericAction {
                                 return this.returnJSONFAILURE("尚未审核通过，请等待");
                             }
                             UserInfoModel v = new UserInfoModel();
-                            v.setUserno(v03.getUserno());
-                            v.setUsername(v03.getUsername());
-                            v.setBmdm(v03.getBmdm());
+                            v.setUserNo(v03.getUserNo());
+                            v.setUserName(v03.getUserName());
+                            v.setBmId(v03.getBmId());
                             v.setBmmc(v03.getBmmc());
-                            v.setRoleno(v03.getRoleno());
-                            v.setRolename(v03.getRolename());
-                            v.setuType(v03.getuType());
+                            v.setRoleNo(String.valueOf(v03.getRoleId()));
+                            v.setRoleName(v03.getRoleName());
+                            v.setUserType(v03.getUserType());
                             this.getSession().setAttribute(
                                     ConstantClass.LOGIN_USER_SESSION_ID, v);
                             return this.returnDatas(v03);

@@ -26,14 +26,14 @@ public class RegistAction extends GenericAction {
             D0003 d = (D0003) this.fromJSON(reqJsonStr, D0003.class);
 
             List tmp = mgr.find(
-                    "from V0003 where userno=?",
-                    d.getUserno());
+                    "from V0003 where userNo=?",
+                    d.getUserNo());
             if (tmp == null || tmp.isEmpty()) {
-                d.setPasswd(MD5Util.convertMD5(MD5Util.string2MD5(d.getPasswd() + d.getUserno())));
+                d.setPasswd(MD5Util.convertMD5(MD5Util.string2MD5(d.getPasswd() + d.getUserNo())));
                 d.setDeltag("2");   // 待审核
-                d.setuType("1");    // 前台用户
+                d.setUserType("1");    // 前台用户
                 if (mgr.save(d) == ConstantClass.DZSUCCESS) {
-                    return this.returnJSONSUCCESS(d.getUserno());
+                    return this.returnJSONSUCCESS(d.getUserNo());
                 }
                 return this.returnJSONFAILURE("注册失败");
             } else {
@@ -48,8 +48,8 @@ public class RegistAction extends GenericAction {
     public String findById() {
         D0003 d = (D0003) this.fromJSON(reqJsonStr, D0003.class);
         List tmp = mgr.find(
-                "from V0003 where userno=?",
-                d.getUserno());
+                "from V0003 where userNo=?",
+                d.getUserNo());
         if (tmp == null || tmp.isEmpty()) {
             return this.returnJSONSUCCESS();
         } else {

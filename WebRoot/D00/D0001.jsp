@@ -8,62 +8,44 @@
 </head>
 <body>
 <div class="box">
-    <div class="box-header with-border" id="dzToolBar">
-        <div class="row col-sm-8" id="queryFieldContainer">
-            <div class="col-sm-4">
-                <input id="query_bmmc" type="text" class="form-control input-sm" placeholder="部门名称">
-            </div>
-            <div class="col-sm-4">
-                <select id="query_deltag" class="form-control input-sm">
-                </select>
-            </div>
-        </div>
-        <div class="pull-right" id="toolBarBtnContainer">
-        </div>
-    </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-            <div id="jqGridContainer" class="row">
-                <table id="jqGridList"></table>
-                <div id="jqGridPager"></div>
+        <div class="row">
+            <div id="dzTreeContainer" class="col-xs-5" style="height: 550px;">
+            </div>
+            <div class="col-xs-5">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <strong>部门详情</strong>
+                        <button type="button" id="saveBtn" class="btn btn-sm btn-warning pull-right">保存部门详情
+                        </button>
+                    </div>
+                    <form id="showForm" name="showForm" method="post" action="">
+                        <input type="hidden" id="id">
+                        <input type="hidden" id="parentId">
+                        <input type="hidden" id="deltag">
+                        <input type="hidden" id="seq">
+                        <input type="hidden" id="bmdm">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="bmmc">部门名称</label>
+                                <input type="text" class="form-control" id="bmmc" name="bmmc">
+                            </div>
+                            <div class="form-group">
+                                <label for="descrip">部门描述</label>
+                                <input type="text" class="form-control" id="descrip" name="descrip">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <!-- /.tab-pane -->
     </div>
     <!-- /.tab-content -->
 </div>
-<div class="modal" id="detailDlg" style="display: none;">
-    <form id="showForm" name="showForm" method="post" action="">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span></button>
-                    <h4 id="detailDlgTitleContainer" class="modal-title">Default Modal</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="bmdm">部门代码</label>
-                        <input type="text" class="form-control" required number id="bmdm" name="bmdm" minlength="10" maxlength="10">
-                    </div>
-                    <div class="form-group">
-                        <label for="bmmc">部门名称</label>
-                        <input type="text" class="form-control" id="bmmc" name="bmmc">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" id="detailDlgCloseBtn" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
-                    <button type="button" id="detailDlgSaveBtn" class="btn btn-primary">保存</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </form>
-    <!-- /.modal-dialog -->
-</div>
 <%@include file="../commonjs.jsp" %>
+<script src="<%=request.getContextPath()%>/plugins/dzTree/js/dzTree.js?random=<%=Math.random()%>"></script>
 <script src="<%=request.getContextPath()%>/D00/js/D0001.js?random=<%=Math.random()%>"></script>
 </body>
 </html>

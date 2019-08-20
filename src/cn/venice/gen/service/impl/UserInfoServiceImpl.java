@@ -37,9 +37,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 					.getRequestAttributes()).getRequest();
 			HttpSession session = request.getSession();
 			UserInfoModel info = this.getUserInfoBySession(session);
-			if (info == null || info.getBmdm() == null
-					|| info.getUserno() == null
-					|| info.getUserno().equals("")) {
+			if (info == null || info.getUserNo() == null
+					|| info.getUserNo().equals("")) {
 				throw new UserInfoException("info empty");
 			}
 			return info;
@@ -70,7 +69,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public String getUserBmdmBySession(HttpSession session) {
 		UserInfoModel v = getUserInfoBySession(session);
 		if (v != null) {
-			return v.getBmdm();
+			return String.valueOf(v.getBmId());
 		}
 		return null;
 	}
@@ -84,7 +83,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public String getRolenoBySession(HttpSession session) {
 		UserInfoModel v = getUserInfoBySession(session);
 		if (v != null) {
-			return v.getRoleno();
+			return v.getRoleNo();
 		}
 		return null;
 	}
@@ -101,13 +100,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (v == null) {
 			throw new AuthFaildException("get user from session failed");
 		}
-		if (v.getUserno().equals("admin")) {
+		if (v.getUserNo().equals("admin")) {
 			return "";
 		}
-		if (v.getBmdm() == null || v.getBmdm().length() < 2) {
-			throw new AuthFaildException("bmdm is null or less than 2 char");
-		}
-		String bmdm = v.getBmdm();
+		//if (v.getBmId() == null || v.getBmId().length() < 2) {
+		//	throw new AuthFaildException("bmdm is null or less than 2 char");
+		//}
+		String bmdm = String.valueOf(v.getBmId());
 
 		String authStr = " and bmdm like '" + bmdm + "%'";
 

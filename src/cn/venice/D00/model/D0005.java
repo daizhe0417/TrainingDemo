@@ -1,7 +1,7 @@
 package cn.venice.D00.model;
 
 /**
- * D0005 entity. @author MyEclipse Persistence Tools
+ * D0005 entity.
  */
 
 public class D0005 implements java.io.Serializable {

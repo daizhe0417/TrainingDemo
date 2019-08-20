@@ -23,6 +23,17 @@
                 </param>
                 <param name="bufferSize">1024</param>
             </result>
+            <result name="downloadWord" type="stream">
+                <param name="contentType">
+                    application/vnd.ms-word
+                </param>
+                <param name="inputName">excelStream</param>
+                <param name="contentDisposition">
+                    attachment;filename="${downloadFileName}"
+                </param>
+                <param name="bufferSize">1024</param>
+            </result>
+            <result name="openPage">{3}.jsp</result>
         </action>
         <action name="login" class="loginaction">
             <result type="json">

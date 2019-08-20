@@ -67,7 +67,6 @@
     <!-- /.modal-dialog -->
 </div>
 <%@include file="../commonjs.jsp" %>
-<script src="<%=request.getContextPath()%>/common/dzTable/dzTable.js?random=<%=Math.random()%>"></script>
 <script src="<%=request.getContextPath()%>/Std/js/Benchmark.js?random=<%=Math.random()%>"></script>
 </body>
 </html>
